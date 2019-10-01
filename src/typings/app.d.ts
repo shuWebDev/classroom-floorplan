@@ -7,10 +7,13 @@ declare namespace Services {
   interface AppProps {}
 
   interface AppState {
+    filterboxText: string,
+    filterboxPlaceholder: string,
     services: ServiceData[],
     tags: TagData[],
     categories: CategoryData[],
-    audiences: AudienceData[]
+    audiences: AudienceData[],
+    currentCategory: string
   }
 
   interface ServiceData {
@@ -75,5 +78,14 @@ declare namespace Services {
 declare namespace Category {
   interface CategoryProps {
     categoryListing: Services.AudienceData[]
+  }
+}
+
+declare namespace FilterBoxProps {
+  interface FilterBox {
+    filterBoxChangeHandler: function,
+    filterBoxText: string,
+    filterBoxPlaceholder: string,
+    submitHandler: function
   }
 }

@@ -16,11 +16,11 @@ class Categories extends React.Component<Category.CategoryProps> {
 
   render() {
     if(this.props.categoryListing.length) {
-      return <div>
+      return (
         <ul className="no-bullet">
           {this.generateCategoryListing(this.props.categoryListing)}
         </ul>
-      </div>
+      );
     }
     
   }
