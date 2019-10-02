@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as Util from './util/util';
 import Categories from './components/categories';
 import FilterBox from './components/filterbox';
+import ServiceList from './components/servicelist';
 import './App.css';
 
 class App extends React.Component<Services.AppProps, Services.AppState> {
@@ -15,7 +16,9 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
       services: [],
       tags: [],
       categories: [],
-      audiences: []
+      audiences: [],
+      currentCategory: "00000000-0000-0000-0000000000000000",
+      serviceResultSet: []
     };
   }
 
@@ -41,6 +44,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
       this.setState({
         services: serviceData,
+        serviceResultSet: serviceData,
         tags: tagData,
         categories: categoryData,
         audiences: audienceData
@@ -66,18 +70,21 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   render() {
     if(this.state.services.length && this.state.audiences.length && this.state.tags.length) {
       return (
-        <div className="grid-x grid-margin-x">
-          <div className="cell medium-12">
-            <h2>Toolkit</h2>
-            <div className="grid-x grid-margin-x">
-              <aside className="cell medium-3">
-                <h3>Categories</h3>
-                <nav>
-                  <Categories categoryListing={this.state.audiences} />
-                </nav>
-              </aside>
-              <div className="cell medium-9">
-                <FilterBox filterBoxChangeHandler={this.filterBoxChangeHandler} filterBoxText={this.state.filterboxText} filterBoxPlaceholder={this.state.filterboxPlaceholder} submitHandler={this.formSubmitHandler} />
+        <div style={{"maxWidth": "60rem", "margin": "auto auto"}}>
+          <div className="grid-x grid-margin-x">
+            <div className="cell medium-12">
+              <h2>Toolkit</h2>
+              <div className="grid-x grid-margin-x">
+                <aside className="cell medium-3">
+                  <h3>Categories</h3>
+                  <nav>
+                    <Categories categoryListing={this.state.audiences} />
+                  </nav>
+                </aside>
+                <div className="cell medium-9">
+                  <FilterBox filterBoxChangeHandler={this.filterBoxChangeHandler} filterBoxText={this.state.filterboxText} filterBoxPlaceholder={this.state.filterboxPlaceholder} submitHandler={this.formSubmitHandler} />
+                  <ServiceList serviceResultSet={this.state.serviceResultSet} />
+                </div>
               </div>
             </div>
           </div>

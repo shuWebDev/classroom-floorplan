@@ -13,7 +13,8 @@ declare namespace Services {
     tags: TagData[],
     categories: CategoryData[],
     audiences: AudienceData[],
-    currentCategory: string
+    currentCategory: string,
+    serviceResultSet: ServiceData[]
   }
 
   interface ServiceData {
@@ -35,7 +36,8 @@ declare namespace Services {
       ssid: number,
       origData: string,
       origSize: number
-    }
+    },
+    url: string
   }
 
   interface TagData {
@@ -87,5 +89,15 @@ declare namespace FilterBoxProps {
     filterBoxText: string,
     filterBoxPlaceholder: string,
     submitHandler: function
+  }
+}
+
+declare namespace ServiceItem {
+  interface ServiceItemProps {
+    serviceItemData: Services.ServiceData
+  }
+
+  interface ServiceListProps {
+    serviceResultSet:Services.ServiceData[]
   }
 }

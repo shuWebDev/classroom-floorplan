@@ -1,22 +1,20 @@
-.App {
-  text-align: center;
+.category-button {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
-.App-logo {
-  height: 40vmin;
+.service-cell {
+  padding: 5px;
+  min-height: 155px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.service-cell .card img {
+  width: 50px;
+  padding-right: 10px;
+  float: left;
 }
 
-.App-link {
-  color: #09d3ac;
+.card.callout.secondary {
+  min-height: 100%;
 }

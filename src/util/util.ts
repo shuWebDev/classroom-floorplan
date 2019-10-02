@@ -43,3 +43,21 @@ export function extractAudiences (categoryData:Services.CategoryData[], tsData:S
   return audiences;
 }
 
+export function filterByCategory(category: string, serviceCollection: Services.ServiceData[]) {
+  let resultSet:Services.ServiceData[] = [];
+
+  // NOTE: for each item in the incoming collection
+  for(let item in serviceCollection) {
+    // NOTE: there may be more than one category assigned to any service, so we need to check them all against what we need to return
+    for(let c in serviceCollection[item].category) {
+      // NOTE: if we have a match in the list of categories in this item...
+      if(serviceCollection[item].category[c] === category) {
+        // NOTE: push the item to the return set
+        resultSet.push(serviceCollection[item]);
+      }
+    }
+  }
+
+  return resultSet;
+}
+
