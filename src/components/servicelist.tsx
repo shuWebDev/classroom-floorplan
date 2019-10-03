@@ -17,6 +17,7 @@ class ServiceList extends React.Component<ServiceItem.ServiceListProps> {
     return (
       <div className="grid-x grid-margin-x">
         <div className="medium-12 cell">
+          <strong>{this.props.serviceResultSet.length} matches</strong>
           <div className="grid-x gird-padding-x small-up-2 medium-up-3">
             {this.createViewFromReults(this.props.serviceResultSet)}
           </div>

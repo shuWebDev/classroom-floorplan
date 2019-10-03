@@ -79,7 +79,8 @@ declare namespace Services {
 
 declare namespace Category {
   interface CategoryProps {
-    categoryListing: Services.AudienceData[]
+    categoryListing: Services.AudienceData[],
+    categoryClickHandler: function
   }
 }
 

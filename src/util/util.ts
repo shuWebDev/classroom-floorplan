@@ -43,7 +43,7 @@ export function extractAudiences (categoryData:Services.CategoryData[], tsData:S
   return audiences;
 }
 
-export function filterByCategory(category: string, serviceCollection: Services.ServiceData[]) {
+export function filterByCategory(category: string, serviceCollection: Services.ServiceData[]):Services.ServiceData[] {
   let resultSet:Services.ServiceData[] = [];
 
   // NOTE: for each item in the incoming collection
@@ -58,6 +58,22 @@ export function filterByCategory(category: string, serviceCollection: Services.S
     }
   }
 
+  return resultSet;
+}
+
+export function filterByText(filterText: string, serviceCollection: Services.ServiceData[]):Services.ServiceData[] {
+  let resultSet:Services.ServiceData[] = [];
+
+  for(let item in serviceCollection) {
+    // NOTE: the text we are looking to match could be in either the "description" or "title" fields given those are relevant text
+    if(serviceCollection[item].description.toLowerCase().includes(filterText.toLowerCase())) {
+      resultSet.push(serviceCollection[item]);
+    }
+
+    if(serviceCollection[item].title.toLowerCase().includes(filterText.toLowerCase())) {
+      resultSet.push(serviceCollection[item]);
+    }
+  }
   return resultSet;
 }
 

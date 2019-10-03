@@ -63,7 +63,38 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
   formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  
+    
+    let resultSet:Services.ServiceData[] = [];
+
+    if(this.state.filterboxText !== "") {
+      resultSet = Util.filterByText(this.state.filterboxText, this.state.serviceResultSet);
+    } else {
+      // NOTE: if filter text is blank, reset back to default
+      resultSet = this.state.services;
+    }
+
+    this.setState({
+      serviceResultSet: resultSet
+    });
+
+    return;
+  }
+
+  categoryClickHandler = (value: string) => {
+
+    let resultSet:Services.ServiceData[] = [];
+
+    // NOTE: resultSet is only changing if the category isn't "all"
+    if(value !== "00000000-0000-0000-0000000000000000") {
+      resultSet = Util.filterByCategory(value, this.state.services);
+    } else {
+      resultSet = this.state.services;
+    }
+
+    this.setState({
+      serviceResultSet: resultSet
+    });
+
     return;
   }
 
@@ -78,7 +109,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
                 <aside className="cell medium-3">
                   <h3>Categories</h3>
                   <nav>
-                    <Categories categoryListing={this.state.audiences} />
+                    <Categories categoryListing={this.state.audiences} categoryClickHandler={this.categoryClickHandler} />
                   </nav>
                 </aside>
                 <div className="cell medium-9">
