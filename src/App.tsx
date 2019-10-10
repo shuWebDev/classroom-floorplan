@@ -67,6 +67,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     let resultSet:Services.ServiceData[] = [];
 
     if(this.state.filterboxText !== "") {
+      // NOTE: if the filter textbox isn't blank, filter whatever is in the current result set by what matches the text, if we've previously clicked a category, we will be filtering *those* results, rather than all records. If we haven't previously applied a category, the result set would be all records.
       resultSet = Util.filterByText(this.state.filterboxText, this.state.serviceResultSet);
     } else {
       // NOTE: if filter text is blank, reset back to default

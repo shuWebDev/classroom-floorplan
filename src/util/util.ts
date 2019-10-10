@@ -1,8 +1,8 @@
 ///<reference path='../typings/app.d.ts'/>
 
 
-export async function loadData<T extends object>(url: string): Promise<T> {
-  return await fetch(url)
+export function loadData<T extends object>(url: string): Promise<T> {
+  return fetch(url)
     .then(response => {
       if(!response.ok) {
         throw new Error(response.statusText);
@@ -68,11 +68,11 @@ export function filterByText(filterText: string, serviceCollection: Services.Ser
     // NOTE: the text we are looking to match could be in either the "description" or "title" fields given those are relevant text
     if(serviceCollection[item].description.toLowerCase().includes(filterText.toLowerCase())) {
       resultSet.push(serviceCollection[item]);
-    }
-
-    if(serviceCollection[item].title.toLowerCase().includes(filterText.toLowerCase())) {
-      resultSet.push(serviceCollection[item]);
-    }
+    } else {  
+      if(serviceCollection[item].title.toLowerCase().includes(filterText.toLowerCase())) {
+        resultSet.push(serviceCollection[item]);
+      }
+    } 
   }
   return resultSet;
 }
