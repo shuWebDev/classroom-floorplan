@@ -1,3 +1,5 @@
+declare var $;
+
 declare namespace Services {
 
   interface FetchResponse<T> extends Response {
@@ -10,7 +12,7 @@ declare namespace Services {
     filterboxText: string,
     filterboxPlaceholder: string,
     services: ServiceData[],
-    tags: TagData[],
+    tags: CondensedTagData[],
     categories: CategoryData[],
     audiences: AudienceData[],
     currentCategory: string,
@@ -40,28 +42,6 @@ declare namespace Services {
     url: string
   }
 
-  interface TagData {
-    pageID: number,
-    description: string,
-    category: string[],
-    audience: string[],
-    title: string,
-    tag: string[],
-    uuid: string,
-    includeDescription: boolean,
-    imageSmall: {
-      origHeight: number,
-      altText: string,
-      urlAbsolute: string,
-      urlRelative: string,
-      id: number,
-      origWidth: number,
-      ssid: number,
-      origData: string
-    }
-    url: string
-  }
-
   interface CategoryData {
     pageID: number,
     description: string,
@@ -72,6 +52,20 @@ declare namespace Services {
   }
 
   interface AudienceData {
+    title: string,
+    uuid: string
+  }
+
+  interface TagData {
+    contentID: number,
+    pageID: number,
+    parentID: number,
+    active: boolean,
+    title: string,
+    uuid: string
+  }
+
+  interface CondensedTagData {
     title: string,
     uuid: string
   }

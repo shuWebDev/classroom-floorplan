@@ -22,30 +22,46 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     };
   }
 
+  componentDidUpdate = () => {
+    //$(document).foundation();
+  }
+
   componentDidMount = () => {
     // NOTE: load our data using our generic typed fetch wrapper for each item and updating state once with all the data
     Promise.all([
-      Util.loadData<Services.ServiceData[]>("/tasks-services.json")
+      Util.loadData<Services.ServiceData[]>("/_cs_apps/data/tasks-services.json")
       .then(response => {
         return response;
       }),
 
-      Util.loadData<Services.TagData[]>("/tags.json")
+      Util.loadData<Services.TagData[]>("/_cs_apps/data/tags.json")
       .then(response => {
         return response;
       }),
 
-      Util.loadData<Services.CategoryData[]>("/category.json")
+      Util.loadData<Services.CategoryData[]>("/_cs_apps/data/category.json")
       .then(response => {
         return response;
       })
     ]).then(([serviceData, tagData, categoryData]) => {
       let audienceData:Services.AudienceData[] = Util.extractAudiences(categoryData,serviceData);
 
+      /*for(let i=0; i<serviceData.length; i++) {
+        if(typeof serviceData[i].imageSmall.urlAbsolute !== "undefined") {
+          console.log(`${i}: ${serviceData[i].imageSmall.urlAbsolute}`);
+        } else {
+          console.log(`${i}: no imageSmall defined`);
+        }
+      }*/
+
+      // NOTE: so we only need to do this once at the beginning, trim down the tag date to just the fields we need, disregard the rest
+      let ctd:Services.CondensedTagData[] = Util.cleanUpTags(tagData);
+      console.log(ctd);
+
       this.setState({
         services: serviceData,
         serviceResultSet: serviceData,
-        tags: tagData,
+        tags: ctd,
         categories: categoryData,
         audiences: audienceData
       });
@@ -68,7 +84,10 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
     if(this.state.filterboxText !== "") {
       // NOTE: if the filter textbox isn't blank, filter whatever is in the current result set by what matches the text, if we've previously clicked a category, we will be filtering *those* results, rather than all records. If we haven't previously applied a category, the result set would be all records.
-      resultSet = Util.filterByText(this.state.filterboxText, this.state.serviceResultSet);
+      //resultSet = Util.filterByText(this.state.filterboxText, this.state.serviceResultSet, this.state.tags);
+
+      // NOTE: assume the text in the filter box is a tag, filter by that first
+      //resultSet = Util.filterByTag(this.state.filterboxText, this.state.serviceResultSet, this.state.tags);
     } else {
       // NOTE: if filter text is blank, reset back to default
       resultSet = this.state.services;
