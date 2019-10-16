@@ -56,7 +56,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
       // NOTE: so we only need to do this once at the beginning, trim down the tag date to just the fields we need, disregard the rest
       let ctd:Services.CondensedTagData[] = Util.cleanUpTags(tagData);
-      console.log(ctd);
+      //console.log(ctd);
 
       this.setState({
         services: serviceData,
@@ -84,10 +84,10 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
     if(this.state.filterboxText !== "") {
       // NOTE: if the filter textbox isn't blank, filter whatever is in the current result set by what matches the text, if we've previously clicked a category, we will be filtering *those* results, rather than all records. If we haven't previously applied a category, the result set would be all records.
-      //resultSet = Util.filterByText(this.state.filterboxText, this.state.serviceResultSet, this.state.tags);
+      
+      // NOTE: filter based on the text entered
+      resultSet = Util.queryFilter(this.state.filterboxText, this.state.serviceResultSet, this.state.tags);
 
-      // NOTE: assume the text in the filter box is a tag, filter by that first
-      //resultSet = Util.filterByTag(this.state.filterboxText, this.state.serviceResultSet, this.state.tags);
     } else {
       // NOTE: if filter text is blank, reset back to default
       resultSet = this.state.services;
@@ -118,24 +118,32 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     return;
   }
 
+  resetButtonHandler = () => {
+    let s = this.state.services;
+    this.setState({
+      serviceResultSet: s,
+      filterboxText: "",
+      filterboxPlaceholder: "ex: a name, title, amount..."
+    });
+    document.querySelectorAll<HTMLInputElement>("#filterbox-input")[0].value = "";
+  }
+
   render() {
     if(this.state.services.length && this.state.audiences.length && this.state.tags.length) {
-      return (
-        <div style={{"maxWidth": "60rem", "margin": "auto auto"}}>
-          <div className="grid-x grid-margin-x">
-            <div className="cell medium-12">
-              <h2>Toolkit</h2>
-              <div className="grid-x grid-margin-x">
-                <aside className="cell medium-3">
-                  <h3>Categories</h3>
-                  <nav>
-                    <Categories categoryListing={this.state.audiences} categoryClickHandler={this.categoryClickHandler} />
-                  </nav>
-                </aside>
-                <div className="cell medium-9">
-                  <FilterBox filterBoxChangeHandler={this.filterBoxChangeHandler} filterBoxText={this.state.filterboxText} filterBoxPlaceholder={this.state.filterboxPlaceholder} submitHandler={this.formSubmitHandler} />
-                  <ServiceList serviceResultSet={this.state.serviceResultSet} />
-                </div>
+      return ( 
+        <div className="grid-x grid-margin-x">
+          <div className="cell medium-12">
+            <h2>Toolkit</h2>
+            <div className="grid-x grid-margin-x">
+              <aside className="cell medium-3">
+                <h3>Categories</h3>
+                <nav>
+                  <Categories categoryListing={this.state.audiences} categoryClickHandler={this.categoryClickHandler} />
+                </nav>
+              </aside>
+              <div className="cell medium-9">
+                <FilterBox filterBoxChangeHandler={this.filterBoxChangeHandler} filterBoxText={this.state.filterboxText} filterBoxPlaceholder={this.state.filterboxPlaceholder} submitHandler={this.formSubmitHandler} resetButtonHandler={this.resetButtonHandler} />
+                <ServiceList serviceResultSet={this.state.serviceResultSet} />
               </div>
             </div>
           </div>

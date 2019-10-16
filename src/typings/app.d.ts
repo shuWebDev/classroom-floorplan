@@ -83,7 +83,8 @@ declare namespace FilterBoxProps {
     filterBoxChangeHandler: function,
     filterBoxText: string,
     filterBoxPlaceholder: string,
-    submitHandler: function
+    submitHandler: function,
+    resetButtonHandler: function
   }
 }
 
@@ -96,3 +97,4 @@ declare namespace ServiceItem {
     serviceResultSet:Services.ServiceData[]
   }
 }
+
