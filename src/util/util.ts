@@ -17,20 +17,21 @@ export async function loadData<T extends object>(url: string): Promise<T> {
 
 
 // NOTE: extracts our audiences for the left side listing
-export function extractAudiences (categoryData:Services.CategoryData[], tsData:Services.ServiceData[]):Services.AudienceData[] {
+export function extractAudiences (categoryData:Services.CategoryData[], 
+  tsData:Services.ServiceData[]):Services.AudienceData[] {
+
   // NOTE: our list of categories, will always have an "all"
   let audiences:Services.AudienceData[] = [{title: "All Categories", uuid: "00000000-0000-0000-0000000000000000"}];
   
-  for(let tsItem in tsData) {
+  for(let tsItem of tsData) {
     //console.log(tsData[tsItem].category);
-    for(let tsCategory in tsData[tsItem].category) {
+    for(let tsCategory of tsItem.category) {
       // NOTE: there may be more than one category assigned to this task/service, to we need to cycle through all present
-      let currentTSCategory:string = tsData[tsItem].category[tsCategory]; 
-      for(let category in categoryData) {
-        if(categoryData[category].uuid === currentTSCategory) {
-          let tempItem:Services.AudienceData = {title: categoryData[category].title, uuid: categoryData[category].uuid};
+      let currentTSCategory:string = tsCategory; 
+      for(let category of categoryData) {
+        if(category.uuid === currentTSCategory) {
+          let tempItem:Services.AudienceData = {title: category.title, uuid: category.uuid};
           if(!audiences.some(a => a.uuid === tempItem.uuid)) {
-            //console.log();
            audiences.push({
             title: tempItem.title,
             uuid: tempItem.uuid
@@ -48,13 +49,13 @@ export function filterByCategory(category: string, serviceCollection: Services.S
   let resultSet: Services.ServiceData[] = [];
 
   // NOTE: for each item in the incoming collection
-  for(let item in serviceCollection) {
+  for(let item of serviceCollection) {
     // NOTE: there may be more than one category assigned to any service, so we need to check them all against what we need to return
-    for(let c in serviceCollection[item].category) {
+    for(let c of item.category) {
       // NOTE: if we have a match in the list of categories in this item...
-      if(serviceCollection[item].category[c] === category) {
+      if(c === category) {
         // NOTE: push the item to the return set
-        resultSet.push(serviceCollection[item]);
+        resultSet.push(item);
       }
     }
   }
@@ -71,9 +72,9 @@ export function queryFilter(textInput: string, serviceCollection: Services.Servi
   // NOTE: add in items that may match by title or description, except duplicates
   let tempResults = filterByText(textInput, resultSet);
 
-  for(let t in tempResults) {
-    if(!resultSet.includes(tempResults[t])) {
-      resultSet.push(tempResults[t]);
+  for(let t of tempResults) {
+    if(!resultSet.includes(t)) {
+      resultSet.push(t);
     }
   }
 
@@ -84,9 +85,9 @@ function filterByText(textInput: string, serviceCollection: Services.ServiceData
   let resultSet: Services.ServiceData[] = [];
 
   // NOTE: return items who have a title or description that fully/partially match what was typed in
-  for(let item in serviceCollection) {
-    if((serviceCollection[item].title.includes(textInput)) || (serviceCollection[item].description.includes(textInput))) {
-      resultSet.push(serviceCollection[item]);
+  for(let item of serviceCollection) {
+    if((item.title.includes(textInput)) || (item.description.includes(textInput))) {
+      resultSet.push(item);
     }
   }
 
@@ -94,51 +95,45 @@ function filterByText(textInput: string, serviceCollection: Services.ServiceData
 }
 
 function filterByTag(textInput: string, serviceCollection: Services.ServiceData[], tagData:Services.CondensedTagData[]): Services.ServiceData[] {
-  let t0 = performance.now();
   let resultSet:Services.ServiceData[] = [];
   let uuidsToSearch:string[] = [];
 
   // NOTE: resolve the tag UUIDs in 
-  for(let t in tagData) {
-    if(tagData[t].title.toUpperCase().includes(textInput.toUpperCase())) {
-      if(!uuidsToSearch.includes(tagData[t].uuid)) {
-        uuidsToSearch.push(tagData[t].uuid);
+  for(let t of tagData) {
+    if(t.title.toUpperCase().includes(textInput.toUpperCase())) {
+      if(!uuidsToSearch.includes(t.uuid)) {
+        uuidsToSearch.push(t.uuid);
       }
     }
   }
 
-  for(let s in serviceCollection) {
-    for(let u in uuidsToSearch) {
-      if(serviceCollection[s].tag.includes(uuidsToSearch[u])) {
-        if(!resultSet.includes(serviceCollection[s])) {
-          resultSet.push(serviceCollection[s]);
+  for(let s of serviceCollection) {
+    for(let u of uuidsToSearch) {
+      if(s.tag.includes(u)) {
+        if(!resultSet.includes(s)) {
+          resultSet.push(s);
         }
       }
     }
   }
 
-  let t1 = performance.now();
-  console.log(`FilterByTag took ${t1-t0} milliseconds.` );
   return resultSet;
 }
 
 export function cleanUpTags(tagData: Services.TagData[]):Services.CondensedTagData[] {
-  let t0 = performance.now();
   let condensedTags: Services.CondensedTagData[] = [];
-
-  for(let t in tagData) {
+  console.log(`Tag Data Length: ${tagData.length}`);
+  for(let t of tagData) { 
     let ct:Services.CondensedTagData = {
-      title: tagData[t].title.toString(), // NOTE: .toString() because many tags are or begin with a number and may end up otherwise be treated as such when we're expecting a string here
-      uuid: tagData[t].uuid
+      title: t.title.toString(), // NOTE: .toString() because many tags are or begin with a number and may end up otherwise be treated as such when we're expecting a string here
+      uuid: t.uuid
     };
-
+    
     condensedTags.push(ct);
   }
 
   // NOTE: in an effort to speed up lookups, sort the tags by name. this may make some lookups shorter by eliminating the need to scan the whole tags array for a match. we can find the match and quickly exit the loop.
   condensedTags.sort(compare);
-  let t1 = performance.now();
-  console.log(`cleanUpTags took ${t1-t0} milliseconds to complete.`);
   return condensedTags;
 }
 
