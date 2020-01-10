@@ -122,7 +122,7 @@ function filterByTag(textInput: string, serviceCollection: Services.ServiceData[
 
 export function cleanUpTags(tagData: Services.TagData[]):Services.CondensedTagData[] {
   let condensedTags: Services.CondensedTagData[] = [];
-  console.log(`Tag Data Length: ${tagData.length}`);
+  
   for(let t of tagData) { 
     let ct:Services.CondensedTagData = {
       title: t.title.toString(), // NOTE: .toString() because many tags are or begin with a number and may end up otherwise be treated as such when we're expecting a string here

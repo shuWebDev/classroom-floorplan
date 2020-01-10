@@ -56,7 +56,6 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
       // NOTE: so we only need to do this once at the beginning, trim down the tag data to just the fields we need, disregard the rest
       let ctd:Services.CondensedTagData[] = Util.cleanUpTags(tagData);
-      //console.log(ctd);
 
       this.setState({
         services: serviceData,
