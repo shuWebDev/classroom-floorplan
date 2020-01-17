@@ -18,7 +18,9 @@ export async function loadData<T extends object>(url: string): Promise<T> {
     });
 }
 
-// NOTE: given a service, transform its audience UUIDs into the full data for each audience. input: string[], output: Services.AudienceData[]
+// NOTE: given a service, transform its audience UUIDs into the full data for each audience. 
+// input: string[] (expected from a Services.rawServiceData.audience key), 
+// output: Services.AudienceData[] (expected to be inserted into a Services.ServiceData.audience field)
 export function expandAudiences(audienceArray:string[], categoryData:Services.CategoryData[]):Services.AudienceData[] {
   //console.log(audienceArray);
   let resolvedAudiences:Services.AudienceData[] = [];
@@ -80,6 +82,26 @@ export function extractAudiences (categoryData:Services.CategoryData[],
   }
   // NOTE: return our list of audiences.
   return audiences;
+}
+
+// NOTE: the audience here should be the title of the audience we want to filter on
+export function filterByAudience(audience: string, serviceCollection: Services.ServiceData[]): Services.ServiceData[] {
+  let resultSet:Services.ServiceData[] = [];
+
+  //console.log(serviceCollection);
+  // NOTE: for each item in the incoming collection
+  for(let item of serviceCollection) {
+    // NOTE: items will most likely have more than one audience so we need to check all of them for a match
+    for(let a of item.audience) {
+      //console.log(`audience: ${audience}, a: ${a.title}`)
+      //console.log(`audience: ${audience}, a.title: ${a.title}`);
+      if(a.title.toLowerCase() === audience.toLowerCase()) {
+        resultSet.push(item);
+      }
+    }
+  }
+
+  return resultSet;
 }
 
 export function filterByCategory(category: string, serviceCollection: Services.ServiceData[]):Services.ServiceData[] {

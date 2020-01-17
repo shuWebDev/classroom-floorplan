@@ -18,7 +18,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
       categories: [],
       audiences: [],
       currentCategory: "00000000-0000-0000-0000000000000000",
-      serviceResultSet: []
+      serviceResultSet: [],
+      dataLoaded: false
     };
   }
 
@@ -59,15 +60,30 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
         };
         expandedServiceData.push(esd);
       }
-
       // NOTE: with all the raw data transformed, set state
-      this.setState({
-        services: expandedServiceData,
-        serviceResultSet: expandedServiceData,
-        tags: ctd,
-        categories: categoryData,
-        audiences: Util.extractAudiences(categoryData, expandedServiceData)
-      }); 
+      console.log(this.props.audience);
+      console.log(Util.filterByAudience(this.props.audience, expandedServiceData));
+      // NOTE: check for a passed in audience
+      if(this.props.audience) {
+        let autoFilteredServices:Services.ServiceData[] = Util.filterByAudience(this.props.audience, expandedServiceData);
+        this.setState({
+          services: autoFilteredServices,
+          serviceResultSet: autoFilteredServices,
+          tags: ctd,
+          categories: categoryData,
+          audiences: Util.extractAudiences(categoryData, expandedServiceData),
+          dataLoaded: true
+        })
+      } else { // NOTE: no query string filter, show all
+        this.setState({
+          services: expandedServiceData,
+          serviceResultSet: expandedServiceData,
+          tags: ctd,
+          categories: categoryData,
+          audiences: Util.extractAudiences(categoryData, expandedServiceData),
+          dataLoaded: true
+        }); 
+      }
     })
     .catch((e) => { console.error(e);} );
   }
@@ -132,7 +148,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   }
 
   render() {
-    if(this.state.services.length && this.state.audiences.length && this.state.tags.length) {
+    if(this.state.dataLoaded === true) {
       return ( 
         <div className="grid-x grid-margin-x">
           <div className="cell medium-12">

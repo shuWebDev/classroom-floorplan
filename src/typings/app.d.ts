@@ -24,7 +24,8 @@ declare namespace Services {
     tags: CondensedTagData[],
     categories: CategoryData[],
     currentCategory: string,
-    serviceResultSet: ServiceData[]
+    serviceResultSet: ServiceData[],
+    dataLoaded: boolean
   }
 
   interface RawServiceData {
