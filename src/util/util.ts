@@ -1,5 +1,8 @@
 ///<reference path='../typings/app.d.ts'/>
 
+import ServiceList from "../components/servicelist";
+
+
 // NOTE: Generic fetch that enforces type expectations from the incoming data. 
 // when calling the function, declare a data type (from the .d.ts file) that describes the "shape" of the data you are expecting.
 export async function loadData<T extends object>(url: string): Promise<T> {
@@ -15,13 +18,36 @@ export async function loadData<T extends object>(url: string): Promise<T> {
     });
 }
 
+// NOTE: given a service, transform its audience UUIDs into the full data for each audience. input: string[], output: Services.AudienceData[]
+export function expandAudiences(audienceArray:string[], categoryData:Services.CategoryData[]):Services.AudienceData[] {
+  //console.log(audienceArray);
+  let resolvedAudiences:Services.AudienceData[] = [];
+  // NOTE: cycle through the array of audiences in the supplied service
+  for(let a of audienceArray) {
+    for(let c of categoryData) {
+      if(a === c.uuid) {
+        resolvedAudiences.push(c);
+      }
+    }
+  }
+
+  return resolvedAudiences; // NOTE: returns array of objects that conform to Services.AudienceData
+}
 
 // NOTE: extracts our audiences for the left side listing
 export function extractAudiences (categoryData:Services.CategoryData[], 
   tsData:Services.ServiceData[]):Services.AudienceData[] {
 
   // NOTE: our list of categories, will always have an "all"
-  let audiences:Services.AudienceData[] = [{title: "All Categories", uuid: "00000000-0000-0000-0000000000000000"}];
+  let audiences:Services.AudienceData[] = [
+    {
+      title: "All Categories", 
+      uuid: "00000000-0000-0000-0000000000000000",
+      type: [],
+      pageID: "0",
+      imageSmall: {},
+      description: "Items that fit all categories"
+    }];
   
   for(let tsItem of tsData) {
     //console.log(tsData[tsItem].category);
@@ -30,11 +56,22 @@ export function extractAudiences (categoryData:Services.CategoryData[],
       let currentTSCategory:string = tsCategory; 
       for(let category of categoryData) {
         if(category.uuid === currentTSCategory) {
-          let tempItem:Services.AudienceData = {title: category.title, uuid: category.uuid};
+          let tempItem:Services.AudienceData = {
+            title: category.title, 
+            uuid: category.uuid,
+            type: category.type,
+            imageSmall: category.imageSmall,
+            description: category.description,
+            pageID: category.pageID
+          };
           if(!audiences.some(a => a.uuid === tempItem.uuid)) {
            audiences.push({
             title: tempItem.title,
-            uuid: tempItem.uuid
+            uuid: tempItem.uuid,
+            type: tempItem.type,
+            imageSmall: tempItem.imageSmall,
+            description: tempItem.description,
+            pageID: tempItem.pageID
            });
           }
         }
@@ -54,7 +91,7 @@ export function filterByCategory(category: string, serviceCollection: Services.S
     for(let c of item.category) {
       // NOTE: if we have a match in the list of categories in this item...
       if(c === category) {
-        // NOTE: push the item to the return set
+        // NOTE: push the item to the return set       
         resultSet.push(item);
       }
     }

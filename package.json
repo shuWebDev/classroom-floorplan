@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.4",
     "node-sass": "^4.12.0",
     "react": "^16.10.1",
-    "react-dom": "^16.10.1",
     "react-scripts": "latest",
     "typescript": "^3.5.3"
   },
@@ -30,5 +30,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "query-string": "^6.10.0",
+    "react-dom": "^16.12.0"
   }
 }

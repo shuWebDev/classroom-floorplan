@@ -29,7 +29,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   componentDidMount = () => {
     // NOTE: load our data using our generic typed fetch wrapper for each item and updating state once with all the data
     Promise.all([
-      Util.loadData<Services.ServiceData[]>("/_cs_apps/data/tasks-services.json")
+      Util.loadData<Services.RawServiceData[]>("/_cs_apps/data/tasks-services.json")
       .then(response => {
         return response;
       }),
@@ -44,26 +44,30 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
         return response;
       })
     ]).then(([serviceData, tagData, categoryData]) => {
-      let audienceData:Services.AudienceData[] = Util.extractAudiences(categoryData,serviceData);
-
-      /*for(let i=0; i<serviceData.length; i++) {
-        if(typeof serviceData[i].imageSmall.urlAbsolute !== "undefined") {
-          console.log(`${i}: ${serviceData[i].imageSmall.urlAbsolute}`);
-        } else {
-          console.log(`${i}: no imageSmall defined`);
-        }
-      }*/
-
+      // Expand the audience data of each service first, only UUID given direct from the data
+      
       // NOTE: so we only need to do this once at the beginning, trim down the tag data to just the fields we need, disregard the rest
       let ctd:Services.CondensedTagData[] = Util.cleanUpTags(tagData);
+      let expandedServiceData: Services.ServiceData[] = [];
+      for(let s of serviceData) {
+        let aud:string[] = s.audience;
+        let expandedAudience:Services.AudienceData[] = Util.expandAudiences(aud,categoryData);
+        // NOTE: Build the item for the usable Service data with expanded Audience data
+        let esd:Services.ServiceData = {
+          ...s, 
+          audience: expandedAudience
+        };
+        expandedServiceData.push(esd);
+      }
 
+      // NOTE: with all the raw data transformed, set state
       this.setState({
-        services: serviceData,
-        serviceResultSet: serviceData,
+        services: expandedServiceData,
+        serviceResultSet: expandedServiceData,
         tags: ctd,
         categories: categoryData,
-        audiences: audienceData
-      });
+        audiences: Util.extractAudiences(categoryData, expandedServiceData)
+      }); 
     })
     .catch((e) => { console.error(e);} );
   }
