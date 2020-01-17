@@ -1,10 +1,6 @@
 ///<reference path='../typings/app.d.ts'/>
 
-import ServiceList from "../components/servicelist";
-
-
-// NOTE: Generic fetch that enforces type expectations from the incoming data. 
-// when calling the function, declare a data type (from the .d.ts file) that describes the "shape" of the data you are expecting.
+// NOTE: Generic fetch that enforces type expectations from the incoming data. When calling the function, declare a data type (from the .d.ts file) that describes the "shape" of the data you are expecting. Await, because the nature of this app is that we can't do anything without data.
 export async function loadData<T extends object>(url: string): Promise<T> {
   return await fetch(url)
     .then(response => {
@@ -93,8 +89,6 @@ export function filterByAudience(audience: string, serviceCollection: Services.S
   for(let item of serviceCollection) {
     // NOTE: items will most likely have more than one audience so we need to check all of them for a match
     for(let a of item.audience) {
-      //console.log(`audience: ${audience}, a: ${a.title}`)
-      //console.log(`audience: ${audience}, a.title: ${a.title}`);
       if(a.title.toLowerCase() === audience.toLowerCase()) {
         resultSet.push(item);
       }
@@ -140,6 +134,7 @@ export function queryFilter(textInput: string, serviceCollection: Services.Servi
   return resultSet;
 }
 
+// NOTE: Internal to filtering, function not intended to be used outside this module. Treated like a "private" function
 function filterByText(textInput: string, serviceCollection: Services.ServiceData[]): Services.ServiceData[] {
   let resultSet: Services.ServiceData[] = [];
 
@@ -153,6 +148,7 @@ function filterByText(textInput: string, serviceCollection: Services.ServiceData
   return resultSet;
 }
 
+// NOTE: Internal to filtering, function not intended to be used outside this module. Treated like a "private" function
 function filterByTag(textInput: string, serviceCollection: Services.ServiceData[], tagData:Services.CondensedTagData[]): Services.ServiceData[] {
   let resultSet:Services.ServiceData[] = [];
   let uuidsToSearch:string[] = [];

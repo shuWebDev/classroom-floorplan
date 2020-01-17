@@ -23,13 +23,10 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     };
   }
 
-  componentDidUpdate = () => {
-    //$(document).foundation();
-  }
-
-  componentDidMount = () => {
+  componentDidMount = () => { 
     // NOTE: load our data using our generic typed fetch wrapper for each item and updating state once with all the data
     Promise.all([
+      // NOTE: rawServiceData here, intermediary type because we need to transform this data before setting app state. The audience data needs to be expanded from just UUIDs to full data
       Util.loadData<Services.RawServiceData[]>("/_cs_apps/data/tasks-services.json")
       .then(response => {
         return response;
@@ -60,10 +57,9 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
         };
         expandedServiceData.push(esd);
       }
+      
       // NOTE: with all the raw data transformed, set state
-      console.log(this.props.audience);
-      console.log(Util.filterByAudience(this.props.audience, expandedServiceData));
-      // NOTE: check for a passed in audience
+      // NOTE: check for a passed in audience, if there is one, it immediately restricts the data we are working with app-wide to just what matches this audience. If there is no audience, ALL tasks-services data is available to the app.
       if(this.props.audience) {
         let autoFilteredServices:Services.ServiceData[] = Util.filterByAudience(this.props.audience, expandedServiceData);
         this.setState({
@@ -152,7 +148,6 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
       return ( 
         <div className="grid-x grid-margin-x">
           <div className="cell medium-12">
-            <h2>Toolkit</h2>
             <div className="grid-x grid-margin-x">
               <aside className="cell medium-3">
                 <h3>Categories</h3>
