@@ -1,3 +1,3 @@
-# Tasks and Services 2.0
+#Floorplan Toolkit
 
-An update and reboot of the Tasks and Services app with updated React and dependencies, and rebuilt components
+based on the previous toolkit, a directory for Classroom Floorplans
