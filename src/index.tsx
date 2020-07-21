@@ -13,5 +13,5 @@ if((root !== null) && (root.dataset.audience)) {
 }
 
 ReactDOM.render(
-<App updated={Date.now()} displayName="Student Services Toolkit Application 2.0" audience={qs.audience} category={qs.category} tag={qs.tag} />, 
+<App />, 
 document.getElementById('root'));

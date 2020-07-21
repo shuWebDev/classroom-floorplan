@@ -1,0 +1,79 @@
+{
+  "data": [
+    {
+      "displayName": "Test 101",
+      "smallImage": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/North-Capture-Space_320.jpg",
+        "altText": "Room with gym mats and other equipment."
+      },
+      "campus": "1",
+      "building": "AS",
+      "description": "<p>this is a short description area</p>",
+      "roomType": "3",
+      "floorPlan02": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/academicx940.jpg",
+        "altText": "Classroom of students learning."
+      },
+      "floorPlan01": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/_core_center320X180.jpg",
+        "altText": "Empty classroom"
+      },
+      "roomNumber": "101",
+      "uuid": "4FEB7D3D-F899-76E2-1BA493E5CCB9F734",
+      "mediumImage": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/GOH2020-320x180.jpg",
+        "altText": "A Graduate Student Working in a Classroom"
+      }
+    },
+    {
+      "displayName": "Classroom Record Number 2",
+      "smallImage": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/CommArts-320_1.jpg",
+        "altText": "CommArts"
+      },
+      "campus": "2",
+      "building": "PH",
+      "description": "<p>Description of Classroom Record Number 2</p>",
+      "roomType": "4",
+      "floorPlan02": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/graduates-on-sealx222.png",
+        "altText": "Graduates on the seal"
+      },
+      "floorPlan01": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/Walkway.jpg",
+        "altText": "Two people rolling out a walkway."
+      },
+      "roomNumber": "500",
+      "uuid": "7C102F6D-09F0-31F7-11E6BA69BD106757",
+      "mediumImage": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/cathedral.jpg",
+        "altText": "Cathedral Basilica of the Sacred Heart"
+      }
+    },
+    {
+      "displayName": "Another Hall Classroom 3",
+      "smallImage": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/Stephen-Waldis.jpg",
+        "altText": "Photo of Stephen Waldis."
+      },
+      "campus": "3",
+      "building": "NU",
+      "description": "<p>Description of Another Hall Classroom 3 in the School of Medicine</p>",
+      "roomType": "3",
+      "floorPlan02": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/Izz_Mer_Dixon-222.jpg",
+        "altText": "Izz Mer Dixon"
+      },
+      "floorPlan01": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/Christina-Stanhope-320.jpg",
+        "altText": "Christina Stanhope"
+      },
+      "roomNumber": "401",
+      "uuid": "7C3F556F-09F7-98A6-FC6B8D305139B5CE",
+      "mediumImage": {
+        "image": "https://site8.auth.dev.shu.commonspotcloud.com/images/virtual-exchange-320.jpg",
+        "altText": "virtual exchange"
+      }
+    }
+  ]
+}
