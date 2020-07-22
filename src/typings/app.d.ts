@@ -9,8 +9,9 @@ declare namespace Services {
   interface AppProps {}
 
   interface AppState {
-    data: {},
-    results: ClassroomData[],
+    data: ClassroomData[],
+    campusResults: ClassroomData[],
+    currentCampus: boolean,
     filterboxText: string,
     filterboxPlaceholder: string
   }
@@ -44,13 +45,22 @@ interface ClassroomData {
     image: string;
     altText: string;
   },
-  campus: number;
+  campus: string;
   building: string;
   description: string;
-  roomType: number,
+  roomType: string,
+  roomNumber: number,
   uuid: string
 }
 interface ResultsState {}
 interface ResultsProps {
   resultsData: ClassroomData[];
+}
+
+interface CampusSelectProps {
+  clickHandler: function;
+}
+
+interface RoomTypeProps {
+  clickHandler: function;
 }

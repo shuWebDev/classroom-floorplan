@@ -13,3 +13,34 @@ export async function loadData<T extends object>(url: string): Promise<T> {
       return data.data;
     });
 }
+
+// NOTE: filter by given campus ID. 
+export function filterByCampus(campusID: string, data: ClassroomData[]): ClassroomData[] {
+  // NOTE: our final results array
+  let resultSet: ClassroomData[] = [];
+
+  for(let item of data) {
+    console.log(item.campus);
+    // NOTE: check the current record's ID. If it matches what we want, add to the results set
+    if(item.campus === campusID) {
+      resultSet.push(item);
+    }
+  }
+  
+  return resultSet;
+}
+
+// NOTE: filter by room type 
+export function filterByRoomType(roomType: string, data: ClassroomData[]): ClassroomData[] {
+  let resultSet: ClassroomData[] = [];
+  
+  for(let item of data) {
+    console.log(item.campus);
+    // NOTE: check the current record's ID. If it matches what we want, add to the results set
+    if(item.campus === roomType) {
+      resultSet.push(item);
+    }
+  }
+
+  return resultSet;
+}
