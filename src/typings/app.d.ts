@@ -13,7 +13,8 @@ declare namespace Services {
     campusResults: ClassroomData[],
     currentCampus: boolean,
     filterboxText: string,
-    filterboxPlaceholder: string
+    filterboxPlaceholder: string,
+    elementID: number
   }
 }
 
@@ -48,6 +49,7 @@ interface ClassroomData {
   campus: string;
   building: string;
   description: string;
+  roomTypeID: string,
   roomType: string,
   roomNumber: number,
   uuid: string,
@@ -66,7 +68,8 @@ interface RawAPIData {
 
 interface ResultsState {}
 interface ResultsProps {
-  resultsData: ClassroomData[];
+  resultsData: ClassroomData[],
+  elementID: number
 }
 
 interface CampusSelectProps {
@@ -75,8 +78,4 @@ interface CampusSelectProps {
 
 interface RoomTypeProps {
   clickHandler: function;
-}
-
-interface FilterBoxProps {
-  resetButtonHandler: function;
 }

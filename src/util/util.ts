@@ -35,12 +35,21 @@ export function filterByRoomType(roomType: string, data: ClassroomData[]): Class
   let resultSet: ClassroomData[] = [];
   
   for(let item of data) {
-    console.log(item.campus);
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
-    if(item.campus === roomType) {
+    if(item.roomType === roomType) {
       resultSet.push(item);
     }
   }
 
+  return resultSet;
+}
+
+export function filterByText(text: string, data: ClassroomData[]): ClassroomData[] {
+  let resultSet: ClassroomData[] = [];
+  for(let item of data) {
+    if(item.displayName.toUpperCase().includes(text.toUpperCase())) {
+      resultSet.push(item);
+    }
+  }
   return resultSet;
 }

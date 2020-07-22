@@ -16,7 +16,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
       campusResults: [], // NOTE: changes based on filtering
       currentCampus: false,
       filterboxPlaceholder: "Enter a search term...",
-      filterboxText: ""
+      filterboxText: "",
+      elementID: 0
     };
   }
   
@@ -25,6 +26,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     .then(response => {
       console.log(response);
       this.setState({
+        elementID: response.elementID,
         data: response.data,
         campusResults: response.data
       })
@@ -41,6 +43,11 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   
   formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let results = Util.filterByText(this.state.filterboxText, this.state.data);
+
+    this.setState({
+      campusResults: results
+    });
     return;
   }
 
@@ -58,10 +65,10 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   campusSelectClickHandler = (value: string) => {
     let resultSet: ClassroomData[] = [];
 
-    console.log(`user clicked ${value}`);
+    //console.log(`user clicked ${value}`);
     // NOTE: filter the current set of results based on what the user clicked for campus
     resultSet = Util.filterByCampus(value, this.state.data);
-    console.log(resultSet);
+    //console.log(resultSet);
     // NOTE: update our results in state
     this.setState({
       campusResults: resultSet,
@@ -83,7 +90,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
       resultSet = Util.filterByRoomType(value, this.state.campusResults);
     }
     
-    console.log(`user clicked ${value}`);
+    //console.log(`user clicked ${value}`);
 
     // NOTE: update our results in state
     this.setState({
@@ -112,7 +119,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
                 <div className="grid-x grid-margin-x">
                   <div className="cell medium-12">
                     <h3>Results</h3>
-                    <Results resultsData={this.state.campusResults} />
+                    <Results elementID={this.state.elementID} resultsData={this.state.campusResults} />
                   </div>
                 </div>
               </div>

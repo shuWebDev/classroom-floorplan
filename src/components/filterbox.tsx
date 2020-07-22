@@ -1,4 +1,3 @@
-///<reference path='../typings/app.d.ts'/>
 import * as React from 'react';
 
 const FilterBox:React.FunctionComponent<FilterBoxProps.FilterBox> = (props) => {
