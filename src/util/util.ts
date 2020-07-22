@@ -7,10 +7,10 @@ export async function loadData<T extends object>(url: string): Promise<T> {
       if(!response.ok) {
         throw new Error(response.statusText);
       }
-      return response.json() as Promise<{data: T}>
+      return response.json() as Promise<T>
     })
     .then(data => {
-      return data.data;
+      return data;
     });
 }
 

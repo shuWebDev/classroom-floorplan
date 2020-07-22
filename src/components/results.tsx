@@ -2,7 +2,7 @@ import * as React from 'react';
 
 class Results extends React.Component<ResultsProps> {
   
-  resolveCampus = (campusID: string) => {
+  /*resolveCampus = (campusID: string) => {
     //console.log(`campusID: ${campusID}`);
     let result = "";
     switch(campusID) {
@@ -12,7 +12,7 @@ class Results extends React.Component<ResultsProps> {
     }
 
     return result;
-  }
+  }*/
 
   resolveRoomType = (roomTypeID: string) => {
     switch(roomTypeID) {
@@ -31,7 +31,7 @@ class Results extends React.Component<ResultsProps> {
       <div className="card" key={item.uuid}>
         <ul className="no-bullet">
           <li><a href="https://www.shu.edu" title={`${item.displayName} detail page`}>{item.displayName}</a></li>
-          <li><strong>Campus: </strong>{this.resolveCampus(item.campus)}</li>
+          <li><strong>Campus: </strong>{item.campus}</li>
           <li><strong>Building: </strong>{item.building}</li>
           <li><strong>Room Number: </strong>{item.roomNumber}</li>
           <li><strong>Room Type: </strong>{this.resolveRoomType(item.roomType)}</li>

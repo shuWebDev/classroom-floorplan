@@ -50,8 +50,20 @@ interface ClassroomData {
   description: string;
   roomType: string,
   roomNumber: number,
-  uuid: string
+  uuid: string,
+  pageID: string,
 }
+
+interface RawAPIData {
+  created: string,
+  data: ClassroomData[],
+  elementID: number,
+  count: number,
+  elementName: string
+}
+
+
+
 interface ResultsState {}
 interface ResultsProps {
   resultsData: ClassroomData[];
@@ -63,4 +75,8 @@ interface CampusSelectProps {
 
 interface RoomTypeProps {
   clickHandler: function;
+}
+
+interface FilterBoxProps {
+  resetButtonHandler: function;
 }

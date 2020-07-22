@@ -21,12 +21,13 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   }
   
   componentDidMount = () => { 
-    Util.loadData<ClassroomData[]>("/classroom-information.json")
+    Util.loadData<RawAPIData>("https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all")
     .then(response => {
+      console.log(response);
       this.setState({
-        data: response,
-        campusResults: response
-      });
+        data: response.data,
+        campusResults: response.data
+      })
     });
   }
 
@@ -44,8 +45,12 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   }
 
   resetButtonHandler = () => {
-    
-    //document.querySelectorAll<HTMLInputElement>("#filterbox-input")[0].value = "";
+    // NOTE: Reset all data to initial state
+
+    this.setState({
+      campusResults: this.state.data,
+      currentCampus: false
+    });
 
     return;
   }
