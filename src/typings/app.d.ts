@@ -11,10 +11,13 @@ declare namespace Services {
   interface AppState {
     data: ClassroomData[],
     campusResults: ClassroomData[],
-    currentCampus: boolean,
+    roomResults: ClassroomData[],
+    currentCampus: string,
+    currentRoomType: string,
     filterboxText: string,
     filterboxPlaceholder: string,
-    elementID: number
+    elementID: number,
+    resultsHeadingText: string
   }
 }
 
@@ -30,7 +33,7 @@ declare namespace FilterBoxProps {
 
 interface ClassroomData {
   displayName: string;
-  smallImage: {
+  imageSmall: {
     image: string;
     altText: string;
   },
@@ -42,7 +45,7 @@ interface ClassroomData {
     image: string;
     altText: string;
   },
-  mediumImage: {
+  imageMedium: {
     image: string;
     altText: string;
   },
@@ -57,6 +60,7 @@ interface ClassroomData {
 }
 
 interface RawAPIData {
+  message?: string,
   created: string,
   data: ClassroomData[],
   elementID: number,
@@ -64,11 +68,14 @@ interface RawAPIData {
   elementName: string
 }
 
-
+interface APIErrorResponse {
+  message: string
+}
 
 interface ResultsState {}
 interface ResultsProps {
-  resultsData: ClassroomData[],
+  campusResults: ClassroomData[],
+  roomResults: ClassroomData[],
   elementID: number
 }
 

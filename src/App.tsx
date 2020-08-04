@@ -7,6 +7,7 @@ import CampusSelect from "./components/campusselect";
 import * as Util from './util/util';
 import './App.css';
 
+
 class App extends React.Component<Services.AppProps, Services.AppState> {
   constructor(props:Services.AppProps) {
     super(props);
@@ -14,23 +15,46 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     this.state = {
       data: [], // NOTE: gold copy of initial data, should never change
       campusResults: [], // NOTE: changes based on filtering
-      currentCampus: false,
+      currentCampus: "",
+      currentRoomType: "",
+      roomResults: [], 
       filterboxPlaceholder: "Enter a search term...",
       filterboxText: "",
-      elementID: 0
-    };
-  }
-  
+      elementID: 0,
+      resultsHeadingText: "All Rooms"
+    }; 
+  }; 
+   
   componentDidMount = () => { 
-    Util.loadData<RawAPIData>("https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all")
-    .then(response => {
+    Util.http("https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all")
+    .then((response: RawAPIData | any) => {
       console.log(response);
-      this.setState({
-        elementID: response.elementID,
-        data: response.data,
-        campusResults: response.data
-      })
-    });
+      if(typeof response.message !== "undefined") {
+        this.setState({
+          data: [],
+          campusResults: [],
+          elementID: 0
+        });
+      } else {
+        this.setState({
+          data: response.data,
+          campusResults: response.data,
+          elementID: response.elementID
+        });
+      }
+    }); 
+  }
+
+  componentDidUpdate = () => {
+    if(this.state.filterboxText !== "") {
+      if(this.state.campusResults.length) {
+        if(this.state.roomResults.length) {
+          Util.filterByText(this.state.filterboxText, this.state.roomResults);
+        } else {
+          Util.filterByText(this.state.filterboxText, this.state.campusResults);
+        }
+      }
+    }
   }
 
   filterBoxChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
@@ -56,53 +80,60 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
     this.setState({
       campusResults: this.state.data,
-      currentCampus: false
+      roomResults: [],
+      currentCampus: "",
+      currentRoomType: "",
+      filterboxText: "",
+      resultsHeadingText: "All Rooms"
+    }, () => {
+      document.querySelectorAll(".category-selected").forEach((item) => {
+        item.classList.remove("category-selected");
+      })
     });
 
     return;
   }
 
-  campusSelectClickHandler = (value: string) => {
+  campusSelectClickHandler = (value: string, e:React.MouseEvent<HTMLElement>) => {
     let resultSet: ClassroomData[] = [];
 
-    //console.log(`user clicked ${value}`);
+    console.log(e.currentTarget.classList);
     // NOTE: filter the current set of results based on what the user clicked for campus
     resultSet = Util.filterByCampus(value, this.state.data);
     //console.log(resultSet);
     // NOTE: update our results in state
     this.setState({
       campusResults: resultSet,
-      currentCampus: true // NOTE: set this true because now we've selected a campus. So if we next select a room type, the searchable set is limited to that campus
+      currentCampus: value,
+      resultsHeadingText: `${value} campus` 
     });
-
+    e.currentTarget.classList.add("category-selected");
+    
     return;
   }
 
-  roomTypeClickHandler = (value: string) => {
+  roomTypeClickHandler = (value: string, e:React.MouseEvent<HTMLElement>) => {
     let resultSet: ClassroomData[] = [];
     
-    // NOTE: are we filtering on an "all" view, or have we already selected a campus?
-    if(this.state.currentCampus === false) {
-      // NOTE: "all" view
-      resultSet = Util.filterByRoomType(value, this.state.data);
-    } else {
-      // NOTE: we've narrowed down to a campus previously
-      resultSet = Util.filterByRoomType(value, this.state.campusResults);
-    }
+    console.log(`Room Type: ${value}`);
     
-    //console.log(`user clicked ${value}`);
+    if(this.state.campusResults.length) {
+      resultSet = Util.filterByRoomType(value, this.state.campusResults);
+      this.setState({
+        currentRoomType: value,
+        roomResults: resultSet,
+        resultsHeadingText: (this.state.currentCampus !== "")? `${this.state.currentCampus} campus, ${value} room type`: `${value} room type`
+      });
+      e.currentTarget.classList.add("category-selected");
+    }
 
-    // NOTE: update our results in state
-    this.setState({
-      campusResults: resultSet
-    });
     return;
-  }
+  } 
 
   render() {
     if(this.state.data !== []) {
       return ( 
-        <div className="grid-x grid-margin-x">
+        <div className="grid-x grid-padding-x">
           <div className="cell medium-12">
             <div className="grid-x grid-margin-x">
               <aside className="cell medium-3">
@@ -118,14 +149,14 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
                 <FilterBox resetButtonHandler={this.resetButtonHandler} filterBoxPlaceholder={this.state.filterboxPlaceholder} filterBoxChangeHandler={this.filterBoxChangeHandler} filterBoxText={this.state.filterboxText} submitHandler={this.formSubmitHandler} />
                 <div className="grid-x grid-margin-x">
                   <div className="cell medium-12">
-                    <h3>Results</h3>
-                    <Results elementID={this.state.elementID} resultsData={this.state.campusResults} />
+                    <h3 id="results-header">{this.state.resultsHeadingText}</h3>
+                    <Results elementID={this.state.elementID} campusResults ={this.state.campusResults} roomResults={this.state.roomResults} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </div> 
       );
     } else {
       return <p>Loading...</p>;

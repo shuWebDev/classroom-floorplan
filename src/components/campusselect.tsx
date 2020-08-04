@@ -5,9 +5,9 @@ class CampusSelect extends React.Component<CampusSelectProps> {
   render() {
     return (
       <ul className="no-bullet">
-        <li><button type="button" className="button" onClick={() => {this.props.clickHandler("Nutley")}}>IHS</button></li>
-        <li><button type="button" className="button" onClick={() => {this.props.clickHandler("South Orange")}}>South Orange</button></li>
-        <li><button type="button" className="button" onClick={() => {this.props.clickHandler("Newark")}}>Law School</button></li>
+        <li><button type="button" className="button" onClick={(event) => {this.props.clickHandler("Nutley", event)}}>IHS</button></li>
+        <li><button type="button" className="button" onClick={(event) => {this.props.clickHandler("South Orange", event)}}>South Orange</button></li>
+        <li><button type="button" className="button" onClick={(event) => {this.props.clickHandler("Newark", event)}}>Law School</button></li>
       </ul>
     );
   }
