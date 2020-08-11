@@ -26,7 +26,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   }; 
    
   componentDidMount = () => { 
-    Util.http("https://www.shu.edu/rest/data/classroomInformation/allView")
+    Util.http("/rest/data/classroomInformation/allView")
     .then((response: RawAPIData | any) => {
       console.log(response);
       if(typeof response.message !== "undefined") {
