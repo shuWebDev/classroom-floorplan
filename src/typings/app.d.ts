@@ -55,12 +55,17 @@ interface ClassroomData {
   description: string;
   roomTypeID: string,
   roomType: string,
-  roomNumber: number,
+  roomNumber: string,
   uuid: string,
   pageID: string,
   url: {
     relative: string;
-  }
+  },
+  camera: string;
+  displayPrimary: string;
+  displaySecondary: string;
+  microphoneType: string;
+  lectureCapture: string;
 }
 
 interface RawAPIData {

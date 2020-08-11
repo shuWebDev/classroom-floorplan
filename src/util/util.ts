@@ -22,7 +22,7 @@ export function filterByCampus(campusID: string, data: ClassroomData[]): Classro
     }
   }
   
-  return resultSet;
+  return resultSet.sort(compare);
 }
 
 // NOTE: filter by room type 
@@ -32,32 +32,81 @@ export function filterByRoomType(roomType: string, data: ClassroomData[]): Class
   for(let item of data) {
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
     if(item.roomType === roomType) {
+      console.log(item.roomType);
       resultSet.push(item);
     }
   }
 
-  return resultSet;
+  return resultSet.sort(compare);
 }
 
 export function filterByText(text: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
-  
+  let uuidSet: string[] = [];
   for(let item of data) {
-    if(item["displayName"].toUpperCase().includes(text.toUpperCase())) {
+    if((!uuidSet.includes(item.uuid)) && item["displayName"].toUpperCase().includes(text.toUpperCase())) {
       resultSet.push(item);
+      uuidSet.push(item.uuid);
+    }
+    if((!uuidSet.includes(item.uuid)) && item["campus"].toUpperCase().includes(text.toUpperCase())) {
+      resultSet.push(item);
+      uuidSet.push(item.uuid);
     }
 
-    if(item["campus"].toUpperCase().includes(text.toUpperCase())) {
+    if((!uuidSet.includes(item.uuid)) && item["building"].toUpperCase().includes(text.toUpperCase())) {
       resultSet.push(item);
+      uuidSet.push(item.uuid);
     }
-
-    if(item["building"].toUpperCase().includes(text.toUpperCase())) {
+    if((!uuidSet.includes(item.uuid)) && item["buildingName"].toUpperCase().includes(text.toUpperCase())) {
       resultSet.push(item);
+      uuidSet.push(item.uuid);
+    }
+    if((!uuidSet.includes(item.uuid)) && item["camera"].toUpperCase().includes(text.toUpperCase())) {
+      resultSet.push(item);
+      uuidSet.push(item.uuid);
+    }
+    if((!uuidSet.includes(item.uuid)) && item["displayPrimary"].toUpperCase().includes(text.toUpperCase())) {
+      resultSet.push(item);
+      uuidSet.push(item.uuid);
+    }
+    if((!uuidSet.includes(item.uuid)) && item["displaySecondary"].toUpperCase().includes(text.toUpperCase())) {
+      resultSet.push(item);
+      uuidSet.push(item.uuid);
+    }
+    if((!uuidSet.includes(item.uuid)) && item["microphoneType"].toUpperCase().includes(text.toUpperCase())) {
+      resultSet.push(item);
+      uuidSet.push(item.uuid);
+    }
+    if((!uuidSet.includes(item.uuid)) && item["lectureCapture"].toUpperCase().includes(text.toUpperCase())) {
+      resultSet.push(item);
+      uuidSet.push(item.uuid);
+    }
+    if((!uuidSet.includes(item.uuid)) && item["roomNumber"].toUpperCase().includes(text.toUpperCase())) {
+      resultSet.push(item);
+      uuidSet.push(item.uuid);
     }
   }
   
-  return resultSet;
+  return resultSet.sort(compare);
 }
+
+
+// NOTE: function to compare one tag to another for the purposes of sorting
+export function compare(a:ClassroomData, b:ClassroomData) {
+  const displayNameA:string = a.displayName.toUpperCase(); 
+  const displayNameB:string = b.displayName.toUpperCase();
+
+  let comparison:number = 0;
+
+  if(displayNameA > displayNameB) {
+    comparison = 1;
+  } else if (displayNameA < displayNameB) {
+    comparison = -1;
+  }
+
+  return comparison;
+}
+
 
 
  

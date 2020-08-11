@@ -37,7 +37,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
         });
       } else {
         this.setState({
-          data: response.data,
+          data: response.data.sort(Util.compare), //response.data,
           campusResults: response.data,
           elementID: response.elementID
         });
