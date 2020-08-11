@@ -3,7 +3,7 @@ import * as React from 'react';
 const FilterBox:React.FunctionComponent<FilterBoxProps.FilterBox> = (props) => {
   
     return (
-      <form className="grid-x grid-margin-x" onSubmit={props.submitHandler}>
+      <form className="grid-x grid-padding-x" onSubmit={props.submitHandler}>
         <div className="cell medium-8">
           <input id="filterbox-input" type="text" placeholder={props.filterBoxPlaceholder} onChange={props.filterBoxChangeHandler} />
         </div>

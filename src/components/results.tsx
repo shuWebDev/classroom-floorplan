@@ -7,11 +7,11 @@ class Results extends React.Component<ResultsProps> {
     
     for(let item of data) {
       output.push(
-      <div className="cell card" key={item.uuid} data-equalizer-watch>
+      <div className="cell callout" key={item.uuid} data-equalizer-watch>
         <ul className="no-bullet">
-          <li><a href={`https://site8.auth.dev.shu.commonspotcloud.com/technology/classroom-information.cfm?customel_datapageid_${this.props.elementID}=${item.pageID}`} title={`${item.displayName} detail page`}>{item.displayName}</a></li>
+          <li><a href={item.url.relative} title={`${item.displayName} detail page`}>{item.displayName}</a></li>
           <li><strong>Campus: </strong>{item.campus}</li>
-          <li><strong>Building: </strong>{item.building}</li>
+          <li><strong>Building: </strong>{item.buildingName}</li>
           <li><strong>Room Number: </strong>{item.roomNumber}</li>
           <li><strong>Room Type: </strong>{item.roomType}</li>
         </ul>

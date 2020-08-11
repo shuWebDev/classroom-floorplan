@@ -26,7 +26,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   }; 
    
   componentDidMount = () => { 
-    Util.http("https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all")
+    Util.http("https://www.shu.edu/rest/data/classroomInformation/allView")
     .then((response: RawAPIData | any) => {
       console.log(response);
       if(typeof response.message !== "undefined") {
@@ -133,30 +133,32 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   render() {
     if(this.state.data !== []) {
       return ( 
-        <div className="grid-x grid-padding-x">
-          <div className="cell medium-12">
-            <div className="grid-x grid-margin-x">
-              <aside className="cell medium-3">
-                <h3>Categories</h3>
-                <nav>
-                  <h4>Campus</h4>
-                  <CampusSelect clickHandler={this.campusSelectClickHandler} />
-                  <h4>Room Type</h4>
-                  <RoomType clickHandler={this.roomTypeClickHandler} />
-                </nav>
-              </aside>
-              <div className="cell medium-9">
-                <FilterBox resetButtonHandler={this.resetButtonHandler} filterBoxPlaceholder={this.state.filterboxPlaceholder} filterBoxChangeHandler={this.filterBoxChangeHandler} filterBoxText={this.state.filterboxText} submitHandler={this.formSubmitHandler} />
-                <div className="grid-x grid-margin-x">
-                  <div className="cell medium-12">
-                    <h3 id="results-header">{this.state.resultsHeadingText}</h3>
-                    <Results elementID={this.state.elementID} campusResults ={this.state.campusResults} roomResults={this.state.roomResults} />
+        <div className="grid-container">
+          <div className="grid-x grid-padding-x">
+            <div className="cell medium-12">
+              <div className="grid-x grid-padding-x">
+                <div className="cell medium-3">
+                  <h3>Categories</h3>
+                  <nav>
+                    <h5>Campus</h5>
+                    <CampusSelect clickHandler={this.campusSelectClickHandler} />
+                    <h5>Room Type</h5>
+                    <RoomType clickHandler={this.roomTypeClickHandler} />
+                  </nav>
+                </div>
+                <div className="cell medium-9">
+                  <FilterBox resetButtonHandler={this.resetButtonHandler} filterBoxPlaceholder={this.state.filterboxPlaceholder} filterBoxChangeHandler={this.filterBoxChangeHandler} filterBoxText={this.state.filterboxText} submitHandler={this.formSubmitHandler} />
+                  <div className="grid-x grid-margin-x">
+                    <div className="cell medium-12">
+                      <h3 id="results-header">{this.state.resultsHeadingText}</h3>
+                      <Results elementID={this.state.elementID} campusResults ={this.state.campusResults} roomResults={this.state.roomResults} />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div> 
+          </div> 
+        </div>
       );
     } else {
       return <p>Loading...</p>;

@@ -51,12 +51,16 @@ interface ClassroomData {
   },
   campus: string;
   building: string;
+  buildingName: string;
   description: string;
   roomTypeID: string,
   roomType: string,
   roomNumber: number,
   uuid: string,
   pageID: string,
+  url: {
+    relative: string;
+  }
 }
 
 interface RawAPIData {
