@@ -33,39 +33,30 @@ declare namespace FilterBoxProps {
 
 interface ClassroomData {
   displayName: string;
-  imageSmall: {
-    image: string;
-    altText: string;
-  },
-  floorPlan01: {
-    image: string;
-    altText: string;
-  },
-  floorPlan02: {
-    image: string;
-    altText: string;
-  },
-  imageMedium: {
-    image: string;
-    altText: string;
-  },
+  imageSmall: object,
+  floorPlan01: object,
+  floorPlan02: object,
+  imageMedium: object,
   campus: string;
   building: string;
   buildingName: string;
   description: string;
-  roomTypeID: string,
-  roomType: string,
-  roomNumber: string,
-  uuid: string,
-  pageID: string,
-  url: {
-    relative: string;
-  },
+  roomTypeID: string;
+  roomType: string;
+  roomNumber: string;
+  uuid: string;
+  pageID: string;
+  url: URL; 
   camera: string;
   displayPrimary: string;
   displaySecondary: string;
   microphoneType: string;
   lectureCapture: string;
+  [key: string]: TValue;
+}
+
+interface URL {
+  relative: string;
 }
 
 interface RawAPIData {

@@ -79,54 +79,35 @@ export function orderByCampus(data: ClassroomData[]) {
 
 export function filterByText(text: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
-  let uuidSet: string[] = [];
-  for(let item of data) {
-    if((!uuidSet.includes(item.uuid)) && item["displayName"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
-    if((!uuidSet.includes(item.uuid)) && item["campus"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
 
-    if((!uuidSet.includes(item.uuid)) && item["building"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
-    if((!uuidSet.includes(item.uuid)) && item["buildingName"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
-    if((!uuidSet.includes(item.uuid)) && item["camera"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
-    if((!uuidSet.includes(item.uuid)) && item["displayPrimary"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
-    if((!uuidSet.includes(item.uuid)) && item["displaySecondary"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
-    if((!uuidSet.includes(item.uuid)) && item["microphoneType"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
-    if((!uuidSet.includes(item.uuid)) && item["lectureCapture"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
-    if((!uuidSet.includes(item.uuid)) && item["roomNumber"].toUpperCase().includes(text.toUpperCase())) {
-      resultSet.push(item);
-      uuidSet.push(item.uuid);
-    }
+  
+  for(let item of data) {
+    const keys: string[] = Object.keys(item);
+    //console.log(item);
+    for(let k of keys) {
+      //console.log(k);
+      let p: string = prop(item, k);
+      //console.log(p);  
+      if(typeof p === "string") { 
+        if(p.toString().toUpperCase().includes(text.toUpperCase())) {
+          if(!resultSet.includes(item)) {
+            resultSet.push(item);
+          }
+        }
+      }
+    } 
   }
   
-  return resultSet.sort(compare);
+  //return resultSet.sort(compare);
+  return orderByCampus(resultSet);
 }
 
+
+// NOTE: given an object and key of said object, returns the key value
+// (needed for type assertion since Object.keys doesn't directly satisfy a type trying to match key value pairs with filter)
+function prop<T, K extends keyof T>(obj: T, key: K): any {
+  return obj[key];
+}
 
 // NOTE: function to compare one tag to another for the purposes of sorting
 export function compare(a:ClassroomData, b:ClassroomData) {
@@ -144,11 +125,3 @@ export function compare(a:ClassroomData, b:ClassroomData) {
   return comparison;
 }
 
-
-
- 
-// NOTE: given an object and key of said object, returns the key value
-// (needed for type assertion since Object.keys doesn't directly satisfy a type trying to match key value pairs with filter)
-export function prop<T, K extends keyof T>(obj: T, key: K): any {
-  return obj[key];
-}

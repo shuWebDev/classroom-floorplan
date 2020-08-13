@@ -4,13 +4,13 @@ const FilterBox:React.FunctionComponent<FilterBoxProps.FilterBox> = (props) => {
   
     return (
       <form className="grid-x grid-padding-x" onSubmit={props.submitHandler}>
-        <div className="cell medium-4">
+        <div className="cell medium-7">
           <input id="filterbox-input" type="text" placeholder={props.filterBoxPlaceholder} onChange={props.filterBoxChangeHandler} />
         </div>
-        <div className="cell medium-8">
+        <div className="cell medium-5">
           <div className="button-group">
-            <input className="button" type="submit" value="Submit" />
-            <button onClick={props.resetButtonHandler}  className="button" type="button">All Room Types/Campuses</button>
+            <input className="button medium-6" type="submit" value="Submit" />
+            <button onClick={props.resetButtonHandler}  className="button medium-6" type="button">Reset</button>
           </div>
         </div>
         

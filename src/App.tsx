@@ -26,7 +26,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   }; 
    
   componentDidMount = () => { 
-    Util.http("/rest/data/classroomInformation/allView")
+    Util.http("https://www.shu.edu/rest/data/classroomInformation/allView")
     .then((response: RawAPIData | any) => {
       //console.log(response);
       if(typeof response.message !== "undefined") {
@@ -90,7 +90,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
         item.classList.remove("category-selected");
       })
     });
-
+ 
     return;
   }
 
@@ -131,7 +131,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   } 
 
   render() {
-    if(this.state.data !== []) {
+    if(this.state.data.length) {
       return ( 
         <div className="grid-container">
           <div className="grid-x grid-padding-x">
