@@ -28,7 +28,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   componentDidMount = () => { 
     Util.http("/rest/data/classroomInformation/allView")
     .then((response: RawAPIData | any) => {
-      console.log(response);
+      //console.log(response);
       if(typeof response.message !== "undefined") {
         this.setState({
           data: [],
@@ -37,8 +37,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
         });
       } else {
         this.setState({
-          data: response.data.sort(Util.compare), //response.data,
-          campusResults: response.data,
+          data: Util.orderByCampus(response.data), //response.data.sort(Util.compare),
+          campusResults: Util.orderByCampus(response.data),
           elementID: response.elementID
         });
       }
@@ -97,7 +97,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   campusSelectClickHandler = (value: string, e:React.MouseEvent<HTMLElement>) => {
     let resultSet: ClassroomData[] = [];
 
-    console.log(e.currentTarget.classList);
+    //console.log(e.currentTarget.classList);
     // NOTE: filter the current set of results based on what the user clicked for campus
     resultSet = Util.filterByCampus(value, this.state.data);
     //console.log(resultSet);
@@ -115,7 +115,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   roomTypeClickHandler = (value: string, e:React.MouseEvent<HTMLElement>) => {
     let resultSet: ClassroomData[] = [];
     
-    console.log(`Room Type: ${value}`);
+    //console.log(`Room Type: ${value}`);
     
     if(this.state.campusResults.length) {
       resultSet = Util.filterByRoomType(value, this.state.campusResults);

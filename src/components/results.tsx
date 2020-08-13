@@ -23,7 +23,7 @@ class Results extends React.Component<ResultsProps> {
   }
   
   render() {
-    console.log(this.props);
+    //console.log(this.props);
     if(this.props.campusResults.length) {
       if(this.props.roomResults.length) {
         // NOTE: if we have both, then we want the room data which is filtered by campus AND room type

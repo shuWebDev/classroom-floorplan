@@ -28,7 +28,8 @@ export function filterByCampus(campusID: string, data: ClassroomData[]): Classro
 // NOTE: filter by room type 
 export function filterByRoomType(roomType: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
-  console.log(`Room Type: ${roomType}`);
+  //let filteredSet: ClassroomData[] = [];
+  //console.log(`Room Type: ${roomType}`);
   for(let item of data) {
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
     if(item.roomType === roomType) {
@@ -37,7 +38,43 @@ export function filterByRoomType(roomType: string, data: ClassroomData[]): Class
     }
   }
 
-  return resultSet.sort(compare);
+  return orderByCampus(resultSet);
+}
+
+export function orderByCampus(data: ClassroomData[]) {
+  let resultSet: ClassroomData[] = [];
+
+  // NOTE: split up results by campus location (SO, then IHS, then Law)
+  let soRooms: ClassroomData[] = [];
+  let ihsRooms: ClassroomData[] = [];
+  let lawRooms: ClassroomData[] = [];
+
+  for(let item of data) {
+    switch(item.campus) {
+      case "Newark" : lawRooms.push(item); break;
+      case "Nutley" : ihsRooms.push(item); break;
+      default: soRooms.push(item); break;
+    }
+  }
+
+  // NOTE: sort each group alphabetically
+  soRooms = soRooms.sort(compare);
+  ihsRooms = ihsRooms.sort(compare);
+  lawRooms = lawRooms.sort(compare);
+
+  for(let item of soRooms) {
+    resultSet.push(item);
+  }
+
+  for(let item of ihsRooms) {
+    resultSet.push(item);
+  }
+
+  for(let item of lawRooms) {
+    resultSet.push(item);
+  }
+  
+  return resultSet;
 }
 
 export function filterByText(text: string, data: ClassroomData[]): ClassroomData[] {
