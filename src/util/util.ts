@@ -83,11 +83,8 @@ export function filterByText(text: string, data: ClassroomData[]): ClassroomData
   
   for(let item of data) {
     const keys: string[] = Object.keys(item);
-    //console.log(item);
     for(let k of keys) {
-      //console.log(k);
-      let p: string = prop(item, k);
-      //console.log(p);  
+      let p: string = prop(item, k);  
       if(typeof p === "string") { 
         if(p.toString().toUpperCase().includes(text.toUpperCase())) {
           if(!resultSet.includes(item)) {
@@ -98,7 +95,6 @@ export function filterByText(text: string, data: ClassroomData[]): ClassroomData
     } 
   }
   
-  //return resultSet.sort(compare);
   return orderByCampus(resultSet);
 }
 
