@@ -121,3 +121,30 @@ export function compare(a:ClassroomData, b:ClassroomData) {
   return comparison;
 }
 
+// NOTE: function to extract unique building names for a drop-down replacing Campus list for primary filtering
+export function extractUniqueBuildings(data: ClassroomData[]): string[] {
+  let resultSet: string[] = [];
+
+  // NOTE: cycle through the records and extract unique building names
+  for(let item of data) {
+    if(!resultSet.includes(item.buildingName)) {
+      resultSet.push(item.buildingName);
+    }
+  }
+
+  return resultSet;
+}
+
+// NOTE: Given a building name, find all records with that name
+export function filterByBuildingName(data: ClassroomData[], buildingName: string): ClassroomData[] {
+  let resultSet: ClassroomData[] = [];
+
+  for(let item of data) {
+    if(!resultSet.includes(item)) {
+      if(item.buildingName.includes(buildingName)) {
+        resultSet.push(item);
+      }
+    }
+  }
+  return resultSet;
+}

@@ -17,7 +17,11 @@ declare namespace Services {
     filterboxText: string,
     filterboxPlaceholder: string,
     elementID: number,
-    resultsHeadingText: string
+    resultsHeadingText: string,
+    buildingNames: string[],
+    buildingResults: ClassroomData[]
+    currentBuilding: string,
+    filteredTotal: ClassroomData[] // final result of all currently applied filters
   }
 }
 
@@ -85,4 +89,10 @@ interface CampusSelectProps {
 
 interface RoomTypeProps {
   clickHandler: function;
+}
+
+interface BuildingListProps {
+  buildingNames: string[];
+  buildingChangeHandler: function,
+  currentSelection: string
 }

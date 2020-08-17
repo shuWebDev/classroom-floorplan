@@ -4,6 +4,7 @@ import RoomType from './components/roomtype';
 import FilterBox from './components/filterbox';
 import Results from './components/results';
 import CampusSelect from "./components/campusselect";
+import BuildingList from "./components/buildinglist";
 import * as Util from './util/util';
 import './App.css';
 
@@ -21,9 +22,13 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
       filterboxPlaceholder: "Enter a search term...",
       filterboxText: "",
       elementID: 0,
-      resultsHeadingText: "All Rooms"
+      resultsHeadingText: "All Rooms",
+      buildingNames: [],
+      buildingResults: [],
+      currentBuilding: "Select a Building",
+      filteredTotal: []
     }; 
-  }; 
+  };  
    
   componentDidMount = () => { 
     Util.http("https://www.shu.edu/rest/data/classroomInformation/allView")
@@ -37,28 +42,23 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
         });
       } else {
         this.setState({
-          data: Util.orderByCampus(response.data), //response.data.sort(Util.compare),
+          data: Util.orderByCampus(response.data),
           campusResults: Util.orderByCampus(response.data),
-          elementID: response.elementID
+          elementID: response.elementID,
+          buildingNames: Util.extractUniqueBuildings(response.data)
         });
       }
     }); 
   }
 
-  componentDidUpdate = () => {
-    if(this.state.filterboxText !== "") {
-      if(this.state.campusResults.length) {
-        if(this.state.roomResults.length) {
-          Util.filterByText(this.state.filterboxText, this.state.roomResults);
-        } else {
-          Util.filterByText(this.state.filterboxText, this.state.campusResults);
-        }
-      }
-    }
-  }
+  
 
   filterBoxChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+    
+    let _state = this.state;
+
     this.setState({
+      ..._state,
       filterboxText: (event.target as HTMLInputElement).value
     });
 
@@ -69,16 +69,25 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     event.preventDefault();
     let results = Util.filterByText(this.state.filterboxText, this.state.data);
 
+    // NOTE: copy state so we don't mutate it
+    let _state = this.state;
+
+    // NOTE: reset entire state at once so it's a new object
     this.setState({
+      ..._state,
       campusResults: results
     });
+
     return;
   }
 
   resetButtonHandler = () => {
     // NOTE: Reset all data to initial state
 
+    let _state = this.state;
+
     this.setState({
+      ..._state,
       campusResults: this.state.data,
       roomResults: [],
       currentCampus: "",
@@ -102,7 +111,11 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     resultSet = Util.filterByCampus(value, this.state.data);
     //console.log(resultSet);
     // NOTE: update our results in state
+
+    let _state = this.state;
+
     this.setState({
+      ..._state,
       campusResults: resultSet,
       currentCampus: value,
       resultsHeadingText: `${value} campus` 
@@ -130,6 +143,23 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     return;
   } 
 
+  buildingChangeHandler = (e: React.FormEvent<HTMLSelectElement>) => {
+    
+    let resultSet: ClassroomData[] = [];
+
+    resultSet = Util.filterByBuildingName(this.state.data, e.currentTarget.value);
+    
+    let _state = this.state;
+    
+    this.setState({
+      ..._state,
+      buildingResults: resultSet,
+      currentBuilding: e.currentTarget.value
+    });
+
+    return;
+  }
+
   render() {
     if(this.state.data.length) {
       return ( 
@@ -139,11 +169,14 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
               <div className="grid-x grid-padding-x">
                 <div className="cell medium-3">
                   <h3>Categories</h3>
-                  <nav>
+                  <nav>  
+                    <h5>Building</h5>
+                    <BuildingList buildingNames={this.state.buildingNames} buildingChangeHandler={this.buildingChangeHandler} currentSelection={this.state.currentBuilding} />
                     <h5>Campus</h5>
                     <CampusSelect clickHandler={this.campusSelectClickHandler} />
                     <h5>Room Type</h5>
                     <RoomType clickHandler={this.roomTypeClickHandler} />
+                    
                   </nav>
                 </div>
                 <div className="cell medium-9">

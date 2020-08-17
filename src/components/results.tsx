@@ -3,11 +3,9 @@ import * as React from 'react';
 class Results extends React.Component<ResultsProps> {
   
   generateResultsView = (data: ClassroomData[]) => {
-    let output: JSX.Element[] = [];
-    
-    for(let item of data) {
-      output.push(
-      <div className="cell callout" key={item.uuid} data-equalizer-watch>
+    let output: JSX.Element[] = data.map((item) => {
+      return (
+        <div className="cell callout" key={item.uuid} data-equalizer-watch>
         <ul className="no-bullet">
           <li><a href={item.url.relative} title={`${item.displayName} detail page`}>{item.displayName}</a></li>
           <li><strong>Campus: </strong>{item.campus}</li>
@@ -17,7 +15,7 @@ class Results extends React.Component<ResultsProps> {
         </ul>
       </div>
       );
-    }
+    });
 
     return output;
   }
