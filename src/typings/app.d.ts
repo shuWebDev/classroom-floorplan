@@ -37,22 +37,23 @@ interface ClassroomData {
   floorPlan01: object,
   floorPlan02: object,
   imageMedium: object,
-  campus: string;
-  building: string;
-  buildingName: string;
-  description: string;
-  roomTypeID: string;
-  roomType: string;
-  roomNumber: string;
-  uuid: string;
-  pageID: string;
-  url: URL; 
-  camera: string;
-  displayPrimary: string;
-  displaySecondary: string;
-  microphoneType: string;
-  lectureCapture: string;
-  [key: string]: TValue;
+  campus: string,
+  building: string,
+  buildingName: string,
+  description: string,
+  roomCapacity: string,
+  roomTypeID: string,
+  roomType: string,
+  roomNumber: string,
+  uuid: string,
+  pageID: string,
+  url: URL, 
+  camera: string,
+  displayPrimary: string,
+  displaySecondary: string,
+  microphoneType: string,
+  lectureCapture: string,
+  [key: string]: TValue
 }
 
 interface URL {

@@ -23,10 +23,10 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
       elementID: 0,
       resultsHeadingText: "All Rooms"
     }; 
-  }; 
+  };  
    
   componentDidMount = () => { 
-    Util.http("https://www.shu.edu/rest/data/classroomInformation/allView")
+    Util.http("/rest/data/classroomInformation/all")
     .then((response: RawAPIData | any) => {
       //console.log(response);
       if(typeof response.message !== "undefined") {
