@@ -9,6 +9,29 @@ export async function http(url: string): Promise<RawAPIData> {
   return body;
 }
 
+// NOTE: given an object and key of said object, returns the key value
+// (needed for type assertion since Object.keys doesn't directly satisfy a type trying to match key value pairs with filter)
+function prop<T, K extends keyof T>(obj: T, key: K): any {
+  return obj[key];
+}
+
+// NOTE: function to compare one record to another for the purposes of sorting
+const byText = <T extends object>(getTextProperty: (object: T) => string) => (a: T, b: T) => {
+  const recordAField = getTextProperty(a).toString().toUpperCase(); 
+  const recordBField = getTextProperty(b).toString().toUpperCase();
+
+  let comparison:number = 0;
+
+  // NOTE: sorting string fields
+  if(recordAField > recordBField) {
+    comparison = 1;
+  } else if (recordAField < recordBField) {
+    comparison = -1;
+  }
+
+  return comparison;
+}
+
 // NOTE: filter by given campus ID. 
 export function filterByCampus(campusID: string, data: ClassroomData[]): ClassroomData[] {
   // NOTE: our final results array
@@ -22,7 +45,7 @@ export function filterByCampus(campusID: string, data: ClassroomData[]): Classro
     }
   }
   
-  return resultSet.sort(compare);
+  return resultSet.sort(byText((c: ClassroomData) => c.displayName));
 }
 
 // NOTE: filter by room type 
@@ -58,29 +81,19 @@ export function orderByCampus(data: ClassroomData[]) {
   }
 
   // NOTE: sort each group alphabetically
-  soRooms = soRooms.sort(compare);
-  ihsRooms = ihsRooms.sort(compare);
-  lawRooms = lawRooms.sort(compare);
+  soRooms = soRooms.sort(byText((c: ClassroomData) => c.displayName));
+  ihsRooms = ihsRooms.sort(byText((c: ClassroomData) => c.displayName));
+  lawRooms = lawRooms.sort(byText((c: ClassroomData) => c.displayName));
 
-  for(let item of soRooms) {
-    resultSet.push(item);
-  }
-
-  for(let item of ihsRooms) {
-    resultSet.push(item);
-  }
-
-  for(let item of lawRooms) {
-    resultSet.push(item);
-  }
+  resultSet = resultSet.concat(soRooms, ihsRooms, lawRooms);
   
   return resultSet;
 }
 
+// NOTE: given a string of text, iterate through all records provided and return those that have a field that contains the text, without duplicates
 export function filterByText(text: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
 
-  
   for(let item of data) {
     const keys: string[] = Object.keys(item);
     for(let k of keys) {
@@ -97,27 +110,3 @@ export function filterByText(text: string, data: ClassroomData[]): ClassroomData
   
   return orderByCampus(resultSet);
 }
-
-
-// NOTE: given an object and key of said object, returns the key value
-// (needed for type assertion since Object.keys doesn't directly satisfy a type trying to match key value pairs with filter)
-function prop<T, K extends keyof T>(obj: T, key: K): any {
-  return obj[key];
-}
-
-// NOTE: function to compare one tag to another for the purposes of sorting
-export function compare(a:ClassroomData, b:ClassroomData) {
-  const displayNameA:string = a.displayName.toUpperCase(); 
-  const displayNameB:string = b.displayName.toUpperCase();
-
-  let comparison:number = 0;
-
-  if(displayNameA > displayNameB) {
-    comparison = 1;
-  } else if (displayNameA < displayNameB) {
-    comparison = -1;
-  }
-
-  return comparison;
-}
-

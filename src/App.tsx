@@ -26,9 +26,29 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   };  
    
   componentDidMount = () => { 
-    Util.http("/rest/data/classroomInformation/all")
+    let dataURL: string = "";
+    console.log(this.props);
+    switch(this.props.dataSource) {
+      case "local" : 
+        dataURL = "/classroom-information.json"; 
+        break;
+      case "development": 
+        dataURL = "https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all";
+        break;
+      case "production": 
+        if(typeof this.props.absolute !== "undefined" && this.props.absolute) {
+          dataURL = "https://www.shu.edu/rest/data/classroomInformation/all";
+        } else {
+          dataURL = "/rest/data/classroomInformation/all";
+        }
+        break;
+      default: 
+        dataURL = "/rest/data/classroomInformation/all";
+        break;
+    }
+    
+    Util.http(dataURL)
     .then((response: RawAPIData | any) => {
-      //console.log(response);
       if(typeof response.message !== "undefined") {
         this.setState({
           data: [],

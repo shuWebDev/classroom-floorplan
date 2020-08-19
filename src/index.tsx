@@ -6,12 +6,8 @@ import App from './App';
 
 let qs:queryString.ParsedQuery = queryString.parse(window.location.search);
 
-let root:HTMLElement | null = document.querySelector<HTMLElement>("#root");
-
-if((root !== null) && (root.dataset.audience)) {
-  qs.audience = root.dataset.audience;
-}
+console.log(qs);
 
 ReactDOM.render(
-<App />, 
+<App dataSource={qs.dataSource} absolute={qs.absolute} />, 
 document.getElementById('root'));

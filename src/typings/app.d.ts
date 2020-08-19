@@ -2,11 +2,10 @@ declare var $;
 
 declare namespace Services {
 
-  interface FetchResponse<T> extends Response {
-    parsedBody: T
+  interface AppProps {
+    dataSource: string | string[] | null | undefined;
+    absolute?: string | string[] | null | undefined;
   }
-
-  interface AppProps {}
 
   interface AppState {
     data: ClassroomData[],
@@ -54,10 +53,6 @@ interface ClassroomData {
   microphoneType: string,
   lectureCapture: string,
   [key: string]: TValue
-}
-
-interface URL {
-  relative: string;
 }
 
 interface RawAPIData {
