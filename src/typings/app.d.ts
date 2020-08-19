@@ -78,8 +78,7 @@ interface APIErrorResponse {
 
 interface ResultsState {}
 interface ResultsProps {
-  campusResults: ClassroomData[],
-  roomResults: ClassroomData[],
+  filteredTotal: ClassroomData[],
   elementID: number
 }
 
@@ -95,4 +94,12 @@ interface BuildingListProps {
   buildingNames: string[];
   buildingChangeHandler: function,
   currentSelection: string
+}
+
+interface ActiveFilters {
+  currentResultSet: ClassroomData[],
+  currentBuilding: string,
+  currentCampus: string,
+  currentRoomType: string,
+  filterBoxText: string
 }

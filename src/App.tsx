@@ -15,18 +15,18 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
     this.state = {
       data: [], // NOTE: gold copy of initial data, should never change
-      campusResults: [], // NOTE: changes based on filtering
-      currentCampus: "",
-      currentRoomType: "",
-      roomResults: [], 
-      filterboxPlaceholder: "Enter a search term...",
-      filterboxText: "",
-      elementID: 0,
-      resultsHeadingText: "All Rooms",
       buildingNames: [],
       buildingResults: [],
+      campusResults: [], // NOTE: changes based on filtering
       currentBuilding: "Select a Building",
-      filteredTotal: []
+      currentCampus: "",
+      currentRoomType: "",
+      elementID: 0,
+      filterboxPlaceholder: "Enter a search term...",
+      filterboxText: "",
+      filteredTotal: [],
+      resultsHeadingText: "All Rooms",
+      roomResults: [] 
     }; 
   };  
    
@@ -37,13 +37,13 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
       if(typeof response.message !== "undefined") {
         this.setState({
           data: [],
-          campusResults: [],
+          filteredTotal: [],
           elementID: 0
         });
       } else {
         this.setState({
           data: Util.orderByCampus(response.data),
-          campusResults: Util.orderByCampus(response.data),
+          filteredTotal: Util.orderByCampus(response.data),
           elementID: response.elementID,
           buildingNames: Util.extractUniqueBuildings(response.data)
         });
@@ -67,15 +67,24 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   
   formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let results = Util.filterByText(this.state.filterboxText, this.state.data);
+    let resultSet: ClassroomData[] = [];
 
-    // NOTE: copy state so we don't mutate it
-    let _state = this.state;
+    // NOTE: grab the current state of the filters and the currently displayed data set (filteredTotal)
+    const filterPackage: ActiveFilters = {
+      currentResultSet: this.state.filteredTotal,
+      currentBuilding: this.state.currentBuilding,
+      currentCampus: this.state.currentCampus,
+      currentRoomType: this.state.currentRoomType,
+      filterBoxText: this.state.filterboxText
+    };
+
+    // NOTE: send the package to the filter broker to perform filtering
+    resultSet = Util.filterBroker(filterPackage);
 
     // NOTE: reset entire state at once so it's a new object
     this.setState({
-      ..._state,
-      campusResults: results
+      ...this.state,
+      campusResults: resultSet
     });
 
     return;
@@ -84,10 +93,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   resetButtonHandler = () => {
     // NOTE: Reset all data to initial state
 
-    let _state = this.state;
-
     this.setState({
-      ..._state,
+      ...this.state,
       campusResults: this.state.data,
       roomResults: [],
       currentCampus: "",
@@ -106,17 +113,22 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   campusSelectClickHandler = (value: string, e:React.MouseEvent<HTMLElement>) => {
     let resultSet: ClassroomData[] = [];
 
-    //console.log(e.currentTarget.classList);
-    // NOTE: filter the current set of results based on what the user clicked for campus
-    resultSet = Util.filterByCampus(value, this.state.data);
-    //console.log(resultSet);
-    // NOTE: update our results in state
+    // NOTE: grab the current state of the filters and the currently displayed data set (filteredTotal)
+    const filterPackage: ActiveFilters = {
+      currentResultSet: this.state.filteredTotal,
+      currentBuilding: this.state.currentBuilding,
+      currentCampus: value, // NOTE: value here because we want this new value, not what's in state because that will change after filtering when we reset state
+      currentRoomType: this.state.currentRoomType,
+      filterBoxText: this.state.filterboxText
+    };
 
-    let _state = this.state;
+    // NOTE: send the package to the filter broker to perform filtering
+    resultSet = Util.filterBroker(filterPackage);
+    console.log(resultSet);
 
     this.setState({
-      ..._state,
-      campusResults: resultSet,
+      ...this.state,
+      filteredTotal: resultSet,
       currentCampus: value,
       resultsHeadingText: `${value} campus` 
     });
@@ -132,7 +144,9 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     
     if(this.state.campusResults.length) {
       resultSet = Util.filterByRoomType(value, this.state.campusResults);
+      
       this.setState({
+        ...this.state,
         currentRoomType: value,
         roomResults: resultSet,
         resultsHeadingText: (this.state.currentCampus !== "")? `${this.state.currentCampus} campus, ${value} room type`: `${value} room type`
@@ -147,17 +161,25 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     
     let resultSet: ClassroomData[] = [];
 
-    resultSet = Util.filterByBuildingName(this.state.data, e.currentTarget.value);
-    
-    let _state = this.state;
+    //resultSet = Util.filterByBuildingName(this.state.data, e.currentTarget.value);
     
     this.setState({
-      ..._state,
+      ...this.state,
       buildingResults: resultSet,
       currentBuilding: e.currentTarget.value
     });
 
     return;
+  }
+
+  packageFilters = () => {
+    return {
+      currentResultSet: this.state.filteredTotal,
+      currentBuilding: this.state.currentBuilding,
+      currentCampus: this.state.currentCampus,
+      currentRoomType: this.state.currentRoomType,
+      filterBoxText: this.state.filterboxText
+    }  
   }
 
   render() {
@@ -175,8 +197,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
                     <h5>Campus</h5>
                     <CampusSelect clickHandler={this.campusSelectClickHandler} />
                     <h5>Room Type</h5>
-                    <RoomType clickHandler={this.roomTypeClickHandler} />
-                    
+                    <RoomType clickHandler={this.roomTypeClickHandler} /> 
                   </nav>
                 </div>
                 <div className="cell medium-9">
@@ -184,7 +205,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
                   <div className="grid-x grid-margin-x">
                     <div className="cell medium-12">
                       <h3 id="results-header">{this.state.resultsHeadingText}</h3>
-                      <Results elementID={this.state.elementID} campusResults ={this.state.campusResults} roomResults={this.state.roomResults} />
+                      <Results elementID={this.state.elementID} filteredTotal ={this.state.filteredTotal} />
                     </div>
                   </div>
                 </div>

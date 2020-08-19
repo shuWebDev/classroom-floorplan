@@ -9,6 +9,34 @@ export async function http(url: string): Promise<RawAPIData> {
   return body;
 }
 
+// NOTE: determine how to apply filters depending on which the user has selected and previous results in state.
+export function filterBroker(filterPackage: ActiveFilters): ClassroomData[] {
+
+  // NOTE: set the initial data to what is passed in
+  let resultSet:ClassroomData[] = filterPackage.currentResultSet;
+
+  // NOTE: Determine which filters are active
+  // NOTE: Order - Campus -> Building -> Room Type -> text
+  
+  if(filterPackage.currentCampus !== "") {
+    resultSet = filterByCampus(filterPackage.currentCampus, resultSet);
+  }
+
+  if(filterPackage.currentBuilding !== "Select a Building") {
+    resultSet = filterByBuildingName(filterPackage.currentBuilding, resultSet);
+  }
+
+  if(filterPackage.currentRoomType !== "") {
+    resultSet = filterByRoomType(filterPackage.currentRoomType, resultSet);
+  }
+
+  if(filterPackage.filterBoxText !== "") {
+    resultSet = filterByText(filterPackage.currentRoomType, resultSet);
+  }
+  
+  return resultSet;
+}
+
 // NOTE: filter by given campus ID. 
 export function filterByCampus(campusID: string, data: ClassroomData[]): ClassroomData[] {
   // NOTE: our final results array
@@ -80,7 +108,7 @@ export function orderByCampus(data: ClassroomData[]) {
 export function filterByText(text: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
 
-  
+  // NOTE: for each record, inspect each property and if its type is string, compare to the text we are searching against. If it is a match, add it to the return set.
   for(let item of data) {
     const keys: string[] = Object.keys(item);
     for(let k of keys) {
@@ -136,7 +164,7 @@ export function extractUniqueBuildings(data: ClassroomData[]): string[] {
 }
 
 // NOTE: Given a building name, find all records with that name
-export function filterByBuildingName(data: ClassroomData[], buildingName: string): ClassroomData[] {
+export function filterByBuildingName(buildingName: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
 
   for(let item of data) {
