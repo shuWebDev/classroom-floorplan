@@ -14,7 +14,9 @@ class Results extends React.Component<ResultsProps> {
           <li><strong>Building: </strong>{item.buildingName}</li>
           <li><strong>Room Number: </strong>{item.roomNumber}</li>
           <li><strong>Room Type: </strong>{item.roomType}</li>
-          <li><strong>Room Capacity: </strong>{item.roomCapacity}</li>
+          <li><strong>Room Capacity: </strong>
+            {(parseInt(item.roomCapacity) > 0)? item.roomCapacity : "N/A"}
+          </li>
         </ul>
       </div>
       );

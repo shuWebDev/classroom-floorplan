@@ -85,6 +85,7 @@ export function orderByCampus(data: ClassroomData[]) {
   ihsRooms = ihsRooms.sort(byText((c: ClassroomData) => c.displayName));
   lawRooms = lawRooms.sort(byText((c: ClassroomData) => c.displayName));
 
+  // NOTE: merge individually sorted lists
   resultSet = resultSet.concat(soRooms, ihsRooms, lawRooms);
   
   return resultSet;

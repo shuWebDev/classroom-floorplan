@@ -9,5 +9,5 @@ let qs:queryString.ParsedQuery = queryString.parse(window.location.search);
 console.log(qs);
 
 ReactDOM.render(
-<App dataSource={qs.dataSource} absolute={qs.absolute} />, 
+<App />, 
 document.getElementById('root'));
