@@ -29,6 +29,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     
 
     Util.http("https://www.shu.edu/rest/data/classroomInformation/all")
+    //Util.http("https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all")
     .then((response: RawAPIData | any) => {
       if(typeof response.message !== "undefined") {
         this.setState({
