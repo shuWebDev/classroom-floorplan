@@ -14,9 +14,6 @@ class Results extends React.Component<ResultsProps> {
           <li><strong>Building: </strong>{item.buildingName}</li>
           <li><strong>Room Number: </strong>{item.roomNumber}</li>
           <li><strong>Room Type: </strong>{item.roomType}</li>
-          <li><strong>Room Capacity: </strong>
-            {(parseInt(item.roomCapacity) > 0)? item.roomCapacity : "N/A"}
-          </li>
         </ul>
       </div>
       );
@@ -52,7 +49,7 @@ class Results extends React.Component<ResultsProps> {
         );
       }
     } else {
-      return <p>Sorry, no records match your request. Please try another combination.</p>;
+      return <p>Sorry, no records match your request. Please try another filter.</p>;
     }
   }
 }
