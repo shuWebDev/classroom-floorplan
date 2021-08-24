@@ -34,11 +34,11 @@ const byText = <T extends object>(getTextProperty: (object: T) => string) => (a:
 
 // NOTE: filter by given campus ID. 
 export function filterByCampus(campusID: string, data: ClassroomData[]): ClassroomData[] {
-  // NOTE: our final results array
+  // NOTE: initialize our final results array
   let resultSet: ClassroomData[] = [];
 
+  // NOTE: cycle through all record from the input set, pull out ones that match the campus we are looking for...
   for(let item of data) {
-    //console.log(item.campus);
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
     if(item.campus === campusID) {
       resultSet.push(item);
@@ -51,8 +51,8 @@ export function filterByCampus(campusID: string, data: ClassroomData[]): Classro
 // NOTE: filter by room type 
 export function filterByRoomType(roomType: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
-  //let filteredSet: ClassroomData[] = [];
-  //console.log(`Room Type: ${roomType}`);
+  console.log(`Room Type: ${roomType}`);
+  console.log(`input set length: ${data.length}`);
   for(let item of data) {
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
     if(item.roomType === roomType) {
@@ -61,7 +61,7 @@ export function filterByRoomType(roomType: string, data: ClassroomData[]): Class
     }
   }
 
-  return orderByCampus(resultSet);
+  return resultSet;//orderByCampus(resultSet);
 }
 
 export function orderByCampus(data: ClassroomData[]) {

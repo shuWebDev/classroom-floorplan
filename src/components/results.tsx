@@ -25,8 +25,10 @@ class Results extends React.Component<ResultsProps> {
   render() {
     //console.log(this.props);
     if(this.props.campusResults.length) {
+      console.log("There are campus results.");
       if(this.props.roomResults.length) {
         // NOTE: if we have both, then we want the room data which is filtered by campus AND room type
+        console.log("there are room results");
         return (
           <div className="grid-x grid-margin-x">
             <div className="cell medium-12">

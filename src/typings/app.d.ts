@@ -3,7 +3,7 @@ declare var $;
 declare namespace Services {
 
   interface AppProps {
-    dataSource: string | string[] | null | undefined;
+    dataSource: string;
     //absolute?: string | string[] | null | undefined;
   }
 

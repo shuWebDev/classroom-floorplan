@@ -29,7 +29,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     
 
     //Util.http("https://www.shu.edu/rest/data/classroomInformation/all")
-    Util.http("https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all")
+    Util.http(this.props.dataSource)
     .then((response: RawAPIData | any) => {
       if(typeof response.message !== "undefined") {
         this.setState({
@@ -106,7 +106,6 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     // data, not from a dataset that's already been filtered by campus, then room 
     // type and then switch campus from there.
     resultSet = this.state.data;
-    console.log(resultSet);
     // NOTE: NOW that the records have all been reset, filter out just the campus
     // we need
     resultSet = Util.filterByCampus(value, this.state.data);
@@ -125,8 +124,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   roomTypeClickHandler = (value: string, e:React.MouseEvent<HTMLElement>) => {
     let resultSet: ClassroomData[] = [];
     
-    //console.log(`Room Type: ${value}`);
-    
+    console.log(`Room Type: ${value}`);
     if(this.state.campusResults.length) {
       resultSet = Util.filterByRoomType(value, this.state.campusResults);
       this.setState({
