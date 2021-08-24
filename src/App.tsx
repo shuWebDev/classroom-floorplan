@@ -28,8 +28,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   componentDidMount = () => { 
     
 
-    Util.http("https://www.shu.edu/rest/data/classroomInformation/all")
-    //Util.http("https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all")
+    //Util.http("https://www.shu.edu/rest/data/classroomInformation/all")
+    Util.http("https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all")
     .then((response: RawAPIData | any) => {
       if(typeof response.message !== "undefined") {
         this.setState({
@@ -101,6 +101,14 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
     //console.log(e.currentTarget.classList);
     // NOTE: filter the current set of results based on what the user clicked for campus
+    // NOTE: In case we are changing back to campus filtering, reset to original
+    // data first, THEN filter on that. Can only filter by campus from the original
+    // data, not from a dataset that's already been filtered by campus, then room 
+    // type and then switch campus from there.
+    resultSet = this.state.data;
+    console.log(resultSet);
+    // NOTE: NOW that the records have all been reset, filter out just the campus
+    // we need
     resultSet = Util.filterByCampus(value, this.state.data);
     //console.log(resultSet);
     // NOTE: update our results in state

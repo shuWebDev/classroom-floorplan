@@ -6,8 +6,17 @@ import App from './App';
 
 let qs:queryString.ParsedQuery = queryString.parse(window.location.search);
 
+
+let resolveDS = '';
+
+if(qs.dataSource === "dev") {
+  resolveDS = "https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all";
+} else {
+  resolveDS = "https://www.shu.edu/rest/data/classroomInformation/all";
+}
+
 console.log(qs);
 
 ReactDOM.render(
-<App />, 
+<App dataSource={resolveDS}/>, 
 document.getElementById('root'));
