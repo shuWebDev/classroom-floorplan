@@ -5,8 +5,8 @@ class RoomType extends React.Component<RoomTypeProps>{
     return (
       <nav>
         <ul className="vertical menu">
-          <li><button type="button" value="Standard" onClick={(event) => {this.props.clickHandler("Standard", event)}}>Standard</button></li>
-          <li><button type="button" value="Teams" onClick={(event) => {this.props.clickHandler("Teams", event)}}>Teams</button></li>
+          <li><button type="button" value="Standard" onClick={(event) => {this.props.clickHandler("Standard", event.currentTarget.value)}}>Standard</button></li>
+          <li><button type="button" value="Teams" onClick={(event) => {this.props.clickHandler("Teams", event.currentTarget.value)}}>Teams</button></li>
         </ul>
       </nav>
     );

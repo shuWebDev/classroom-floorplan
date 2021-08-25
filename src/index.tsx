@@ -15,7 +15,7 @@ if(qs.dataSource === "dev") {
   resolveDS = "https://www.shu.edu/rest/data/classroomInformation/all";
 }
 
-console.log(qs);
+//console.log(qs);
 
 ReactDOM.render(
 <App dataSource={resolveDS}/>, 

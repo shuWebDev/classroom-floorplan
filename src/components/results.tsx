@@ -23,34 +23,19 @@ class Results extends React.Component<ResultsProps> {
   }
   
   render() {
-    //console.log(this.props);
-    if(this.props.campusResults.length) {
-      console.log("There are campus results.");
-      if(this.props.roomResults.length) {
-        // NOTE: if we have both, then we want the room data which is filtered by campus AND room type
-        console.log("there are room results");
-        return (
-          <div className="grid-x grid-margin-x">
-            <div className="cell medium-12">
-              <div className="grid-x grid-margin-x small-up-2 medium-up-3" data-equalizer data-equalizer-by-row="true">
-              {this.generateResultsView(this.props.roomResults)}
-              </div>
+    // NOTE: if we have results to view
+    if(this.props.currentFilteredData.length) {
+      return (
+        <div className="grid-x grid-margin-x">
+          <div className="cell medium-12">
+            <div className="grid-x grid-margin-x small-up-2 medium-up-3" data-equalizer data-equalizer-by-row="true">
+            {this.generateResultsView(this.props.currentFilteredData)}
             </div>
           </div>
-        );
-      } else {
-        // NOTE: else, we just want the campus-wide results, no room type was selected
-        return (
-          <div className="grid-x grid-margin-x">
-            <div className="cell medium-12">
-              <div className="grid-x grid-margin-x small-up-2 medium-up-3" data-equalizer data-equalizer-by-row="true">
-              {this.generateResultsView(this.props.campusResults)}
-              </div>
-            </div>
-          </div>
-        );
-      }
+        </div>
+      );
     } else {
+      // NOTE: the result set is 0, display "no matches" message
       return <p>Sorry, no records match your request. Please try another filter.</p>;
     }
   }

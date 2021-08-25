@@ -8,15 +8,15 @@ declare namespace Services {
   }
 
   interface AppState {
-    data: ClassroomData[],
-    campusResults: ClassroomData[],
-    roomResults: ClassroomData[],
     currentCampus: string,
+    currentFilteredData: ClassroomData[]
     currentRoomType: string,
+    data: ClassroomData[],
     filterboxText: string,
     filterboxPlaceholder: string,
-    elementID: number,
-    resultsHeadingText: string
+    resultsHeadingText: string,
+    sortByCampus: boolean,
+    sortByRoomType: boolean,
   }
 }
 
@@ -74,9 +74,7 @@ interface APIErrorResponse {
 
 interface ResultsState {}
 interface ResultsProps {
-  campusResults: ClassroomData[],
-  roomResults: ClassroomData[],
-  elementID: number
+  currentFilteredData: ClassroomData[],
 }
 
 interface CampusSelectProps {

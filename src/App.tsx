@@ -14,52 +14,44 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
     this.state = {
       data: [], // NOTE: gold copy of initial data, should never change
-      campusResults: [], // NOTE: changes based on filtering
       currentCampus: "",
       currentRoomType: "",
-      roomResults: [], 
+      currentFilteredData: [], // NOTE: results of most recent filtering go here. Should initially be same as "data"
       filterboxPlaceholder: "Enter a search term...",
       filterboxText: "",
-      elementID: 0,
-      resultsHeadingText: "All Rooms"
+      resultsHeadingText: "All Rooms, All buildings, All Campuses",
+      sortByCampus: false,
+      sortByRoomType: false
     }; 
   };  
    
   componentDidMount = () => { 
     
-
     //Util.http("https://www.shu.edu/rest/data/classroomInformation/all")
     Util.http(this.props.dataSource)
     .then((response: RawAPIData | any) => {
       if(typeof response.message !== "undefined") {
         this.setState({
           data: [],
-          campusResults: [],
-          elementID: 0
+          currentFilteredData: [],
+          //elementID: 0
         });
       } else {
+        let initialDataOrderedByCampus = Util.orderByCampus(response.data);
         this.setState({
-          data: Util.orderByCampus(response.data), //response.data.sort(Util.compare),
-          campusResults: Util.orderByCampus(response.data),
-          elementID: response.elementID
+          // NOTE: set up the "gold copy" from remote and initially the current filtered data is the same
+          data: initialDataOrderedByCampus, 
+          currentFilteredData: initialDataOrderedByCampus
         });
       }
     }); 
   }
 
   componentDidUpdate = () => {
-    if(this.state.filterboxText !== "") {
-      if(this.state.campusResults.length) {
-        if(this.state.roomResults.length) {
-          Util.filterByText(this.state.filterboxText, this.state.roomResults);
-        } else {
-          Util.filterByText(this.state.filterboxText, this.state.campusResults);
-        }
-      }
-    }
+    
   }
 
-  filterBoxChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
+  filterBoxChangeHandler = (event: React.FormEvent) => {
     this.setState({
       filterboxText: (event.target as HTMLInputElement).value
     });
@@ -67,12 +59,12 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     return;
   }
   
-  formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  formSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     let results = Util.filterByText(this.state.filterboxText, this.state.data);
 
     this.setState({
-      campusResults: results
+      currentFilteredData: results
     });
     return;
   }
@@ -81,12 +73,11 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     // NOTE: Reset all data to initial state
 
     this.setState({
-      campusResults: this.state.data,
-      roomResults: [],
+      currentFilteredData: this.state.data,
       currentCampus: "",
       currentRoomType: "",
       filterboxText: "",
-      resultsHeadingText: "All Rooms"
+      resultsHeadingText: "All Rooms, All Buildings, All Campuses"
     }, () => {
       document.querySelectorAll(".category-selected").forEach((item) => {
         item.classList.remove("category-selected");
@@ -96,23 +87,15 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     return;
   }
 
-  campusSelectClickHandler = (value: string, e:React.MouseEvent<HTMLElement>) => {
+  campusSelectClickHandler = (value: string, e:React.MouseEvent) => {
     let resultSet: ClassroomData[] = [];
 
-    //console.log(e.currentTarget.classList);
-    // NOTE: filter the current set of results based on what the user clicked for campus
-    // NOTE: In case we are changing back to campus filtering, reset to original
-    // data first, THEN filter on that. Can only filter by campus from the original
-    // data, not from a dataset that's already been filtered by campus, then room 
-    // type and then switch campus from there.
-    resultSet = this.state.data;
-    // NOTE: NOW that the records have all been reset, filter out just the campus
-    // we need
+    // NOTE: selecting another campus always starts back at all room types for that campus. 
     resultSet = Util.filterByCampus(value, this.state.data);
-    //console.log(resultSet);
+    
     // NOTE: update our results in state
     this.setState({
-      campusResults: resultSet,
+      currentFilteredData: resultSet,
       currentCampus: value,
       resultsHeadingText: `${value} campus` 
     });
@@ -121,18 +104,19 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     return;
   }
 
-  roomTypeClickHandler = (value: string, e:React.MouseEvent<HTMLElement>) => {
+  roomTypeClickHandler = (value: string, e:React.MouseEvent) => {
     let resultSet: ClassroomData[] = [];
     
     console.log(`Room Type: ${value}`);
-    if(this.state.campusResults.length) {
-      resultSet = Util.filterByRoomType(value, this.state.campusResults);
+    if(this.state.currentFilteredData.length) {
+      resultSet = Util.filterByRoomType(value, this.state.currentFilteredData);
       this.setState({
         currentRoomType: value,
-        roomResults: resultSet,
+        currentFilteredData: resultSet,
         resultsHeadingText: (this.state.currentCampus !== "")? `${this.state.currentCampus} campus, ${value} room type`: `${value} room type`
       });
-      e.currentTarget.classList.add("category-selected");
+      //e.currentTarget.classList.add("category-selected");
+      console.log(e);
     }
 
     return;
@@ -159,7 +143,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
                   <div className="grid-x grid-margin-x">
                     <div className="cell medium-12">
                       <h3 id="results-header">{this.state.resultsHeadingText}</h3>
-                      <Results elementID={this.state.elementID} campusResults ={this.state.campusResults} roomResults={this.state.roomResults} />
+                      <Results  currentFilteredData ={this.state.currentFilteredData} />
                     </div>
                   </div>
                 </div>

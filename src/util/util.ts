@@ -52,7 +52,11 @@ export function filterByCampus(campusID: string, data: ClassroomData[]): Classro
 export function filterByRoomType(roomType: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
   console.log(`Room Type: ${roomType}`);
-  console.log(`input set length: ${data.length}`);
+  //console.log('Input set for room search:');
+  //console.table(data);
+  for(let i of data) {
+    console.log(i.roomType);
+  }
   for(let item of data) {
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
     if(item.roomType === roomType) {
