@@ -12,7 +12,7 @@ let resolveDS = '';
 if(qs.dataSource === "dev") {
   resolveDS = "https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all";
 } else {
-  resolveDS = "https://www.shu.edu/rest/data/classroomInformation/all";
+  resolveDS = /*"https://www.shu.edu/rest/data/classroomInformation/all"*/ "/_cs_apps/rest/api/ClassroomInformation.cfc?method=getAll";
 }
 
 //console.log(qs);
