@@ -10,9 +10,9 @@ let qs:queryString.ParsedQuery = queryString.parse(window.location.search);
 let resolveDS = '';
 
 if(qs.dataSource === "dev") {
-  resolveDS = "https://site8.auth.dev.shu.commonspotcloud.com/rest/data/classroomInformation/all";
+  resolveDS = "/_cs_apps/data/dev-data.json";
 } else {
-  resolveDS = /*"https://www.shu.edu/rest/data/classroomInformation/all"*/ "/_cs_apps/rest/api/ClassroomInformation.cfc?method=getAll";
+  resolveDS = "https://www.shu.edu/_cs_apps/rest/api/ClassroomInformation.cfc?method=getAll";
 }
 
 //console.log(qs);
