@@ -15,9 +15,10 @@ let resolveDS = '';
   resolveDS = "https://www.shu.edu/_cs_apps/rest/api/ClassroomInformation.cfc?method=getAll";
 }*/
 
+///_resources/js/_js_apps/classroom-information/ClassroomInformation.json
 
 //console.log(qs);
 
 ReactDOM.render(
-<App dataSource={"/_resources/js/_js_apps/classroom-information/ClassroomInformation.json"}/>, 
+<App dataSource={"https://www.shu.edu/_resources/js/_js_apps/classroom-information/ClassroomInformation.json"}/>, 
 document.getElementById('root'));
