@@ -134,7 +134,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
                   <nav>
                     <h5>Campus</h5>
                     <CampusSelect clickHandler={this.campusSelectClickHandler} />
-                    
+                    <h5>Room Type</h5>
+                    <RoomType clickHandler={this.roomTypeClickHandler} />
                   </nav>
                 </div>
                 <div className="cell medium-9">
