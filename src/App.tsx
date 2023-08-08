@@ -107,16 +107,16 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
   roomTypeClickHandler = (value: string, e:React.MouseEvent) => {
     let resultSet: ClassroomData[] = [];
     
-    console.log(`Room Type: ${value}`);
-    if(this.state.currentFilteredData.length) {
-      resultSet = Util.filterByRoomType(value, this.state.currentFilteredData);
+    //console.log(this.state.data);
+    if(this.state.data.length) {
+      resultSet = Util.filterByRoomType(value, this.state.data);
       this.setState({
         currentRoomType: value,
         currentFilteredData: resultSet,
         resultsHeadingText: (this.state.currentCampus !== "")? `${this.state.currentCampus} campus, ${value} room type`: `${value} room type`
       });
       //e.currentTarget.classList.add("category-selected");
-      console.log(e);
+      //console.log(e);
     }
 
     return;
@@ -134,6 +134,7 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
                   <nav>
                     <h5>Campus</h5>
                     <CampusSelect clickHandler={this.campusSelectClickHandler} />
+                    <br />
                     <h5>Room Type</h5>
                     <RoomType clickHandler={this.roomTypeClickHandler} />
                   </nav>

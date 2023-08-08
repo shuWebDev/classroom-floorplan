@@ -9,8 +9,8 @@ const FilterBox:React.FunctionComponent<FilterBoxProps.FilterBox> = (props) => {
         </div>
         <div className="cell medium-5">
           <div className="button-group">
-            <input className="button medium-6" type="submit" value="Submit" />
-            <button onClick={props.resetButtonHandler}  className="button medium-6" type="button">Reset</button>
+            <input className="button" type="submit" value="Submit" />
+            <button onClick={props.resetButtonHandler}  className="button" type="button">Reset</button>
           </div>
         </div>
         

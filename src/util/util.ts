@@ -54,13 +54,13 @@ export function filterByRoomType(roomType: string, data: ClassroomData[]): Class
   console.log(`Room Type: ${roomType}`);
   //console.log('Input set for room search:');
   //console.table(data);
-  for(let i of data) {
-    console.log(i.roomType);
-  }
+  //for(let i of data) {
+    //console.log(i.roomType);
+  //}
   for(let item of data) {
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
     if(item.roomType === roomType) {
-      console.log(item.roomType);
+      //console.log(item.roomType);
       resultSet.push(item);
     }
   }
