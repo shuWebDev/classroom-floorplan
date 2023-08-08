@@ -27,7 +27,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
    
   componentDidMount = () => { 
     
-    //Util.http("https://www.shu.edu/rest/data/classroomInformation/all")
+    
+    //Util.http("https://www.shu.edu/_resources/dmc/php/classroominformation.php?datasource=classroominformation&returntype=json&ort=room-number%20asc")
     Util.http(this.props.dataSource)
     .then((response: RawAPIData | any) => {
       if(typeof response.message !== "undefined") {
@@ -37,11 +38,15 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
           //elementID: 0
         });
       } else {
-        let initialDataOrderedByCampus = Util.orderByCampus(response.data);
+        console.log(this.state.data);
+        //let initialDataOrderedByCampus = Util.orderByCampus(response);
+        let initialData = response;
         this.setState({
           // NOTE: set up the "gold copy" from remote and initially the current filtered data is the same
-          data: initialDataOrderedByCampus, 
-          currentFilteredData: initialDataOrderedByCampus
+          //data: initialDataOrderedByCampus, 
+          data: initialData,
+          //currentFilteredData: initialDataOrderedByCampus
+          currentFilteredData: initialData
         });
       }
     }); 
@@ -124,7 +129,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
 
   render() {
     if(this.state.data.length) {
-      return ( 
+      
+       return ( 
         <div className="grid-container">
           <div className="grid-x grid-padding-x">
             <div className="cell medium-12">

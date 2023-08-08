@@ -31,27 +31,34 @@ declare namespace FilterBoxProps {
 }
 
 interface ClassroomData {
-  displayName: string;
-  imageSmall: object,
-  floorPlan01: object,
-  floorPlan02: object,
-  imageMedium: object,
-  campus: string,
-  building: string,
-  buildingName: string,
-  description: string,
-  roomCapacity: string,
-  roomTypeID: string,
-  roomType: string,
-  roomNumber: string,
-  uuid: string,
-  pageID: string,
-  url: URL, 
+  ['@href']: string,
+  ['building-name']: string,
   camera: string,
-  displayPrimary: string,
-  displaySecondary: string,
-  microphoneType: string,
-  lectureCapture: string,
+  campus: string,
+  ['classroom-floorplan']: {
+    img: {
+      ['@alt']: string,
+      ['@src']: string,
+    }
+  },
+  ['classroom-image']: {
+    img: {
+      ['@alt']: string,
+      ['@src']: string,
+    }
+  },
+  ['control-type']: string,
+  ['lecture-capture']: string,
+  ['microphone-type']: string,
+  ['primary-display']: string,
+  ['room-number']: string,
+  ['room-type']: string,
+  searchtags: string,
+  ['secondary-display']: string,
+  tags: string,
+  ['teams-appliance']: string,
+  ['web-conferencing']: string,
+  ['wireless-gateway']: string
   [key: string]: TValue
 }
 

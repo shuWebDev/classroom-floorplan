@@ -7,13 +7,13 @@ class Results extends React.Component<ResultsProps> {
     
     for(let item of data) {
       output.push(
-      <div className="cell callout" key={item.uuid} data-equalizer-watch>
+      <div className="cell callout" key={item['room-number'].replace(/ /g, '')} data-equalizer-watch>
         <ul className="no-bullet">
-          <li><a href={item.url.relative} title={`${item.displayName} detail page`}>{item.displayName}</a></li>
+          <li><a href={item['@href']} title={`${item['room-number']} detail page`}>{item['room-number']}</a></li>
           <li><strong>Campus: </strong>{item.campus}</li>
-          <li><strong>Building: </strong>{item.buildingName}</li>
-          <li><strong>Room Number: </strong>{item.roomNumber}</li>
-          <li><strong>Room Type: </strong>{item.roomType}</li>
+          <li><strong>Building: </strong>{item['building-name']}</li>
+          {/*<li><strong>Room Number: </strong>{item['room-number']}</li>*/}
+          <li><strong>Room Type: </strong>{item['room-type']}</li>
         </ul>
       </div>
       );
