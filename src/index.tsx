@@ -10,5 +10,5 @@ import App from './App';
 //let resolveDS = '';
 
 ReactDOM.render(
-  <App dataSource={"https://www.shu.edu/_resources/dmc/php/classroominformation.php?datasource=classroominformation&returntype=json&ort=room-number%20asc"}/>, 
+  <App dataSource={"https://www.shu.edu/_resources/dmc/php/classroominformation.php?datasource=classroominformation&returntype=json&sort=campus%20desc,room-number%20asc"}/>, 
   document.getElementById('root'));

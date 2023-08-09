@@ -16,17 +16,22 @@ function prop<T, K extends keyof T>(obj: T, key: K): any {
 }
 
 // NOTE: function to compare one record to another for the purposes of sorting
-const byText = <T extends object>(getTextProperty: (object: T) => string) => (a: T, b: T) => {
-  const recordAField = getTextProperty(a).toString().toUpperCase(); 
-  const recordBField = getTextProperty(b).toString().toUpperCase();
+const byText = <T extends object>(getTextProperty: (Object: T) => string) => (a: T, b: T) => {
+  let recordAField = getTextProperty(a); 
+  let recordBField = getTextProperty(b);
+
+  recordAField = (typeof recordAField === "string")? recordAField.toUpperCase() : recordAField;
+  recordBField = (typeof recordBField === "string")? recordBField.toUpperCase() : recordBField;
 
   let comparison:number = 0;
 
   // NOTE: sorting string fields
-  if(recordAField > recordBField) {
-    comparison = 1;
-  } else if (recordAField < recordBField) {
-    comparison = -1;
+  if(typeof recordAField === "string" && typeof recordBField === "string") {
+    if(recordAField > recordBField) {
+      comparison = 1;
+    } else if (recordAField < recordBField) {
+      comparison = -1;
+    }
   }
 
   return comparison;
@@ -45,21 +50,16 @@ export function filterByCampus(campusID: string, data: ClassroomData[]): Classro
     }
   }
   
-  return resultSet.sort(byText((c: ClassroomData) => c.displayName));
+  return resultSet.sort(byText((c: ClassroomData) => c['room-number']));
 }
 
 // NOTE: filter by room type 
 export function filterByRoomType(roomType: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
-  console.log(`Room Type: ${roomType}`);
-  //console.log('Input set for room search:');
-  //console.table(data);
-  //for(let i of data) {
-    //console.log(i.roomType);
-  //}
+  
   for(let item of data) {
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
-    if(item.roomType === roomType) {
+    if(item['room-type'] === roomType) {
       //console.log(item.roomType);
       resultSet.push(item);
     }
@@ -85,9 +85,9 @@ export function orderByCampus(data: ClassroomData[]) {
   }
 
   // NOTE: sort each group alphabetically
-  soRooms = soRooms.sort(byText((c: ClassroomData) => c.displayName));
-  ihsRooms = ihsRooms.sort(byText((c: ClassroomData) => c.displayName));
-  lawRooms = lawRooms.sort(byText((c: ClassroomData) => c.displayName));
+  soRooms = soRooms.sort(byText((c: ClassroomData) => c['room-name']));
+  ihsRooms = ihsRooms.sort(byText((c: ClassroomData) => c['room-name']));
+  lawRooms = lawRooms.sort(byText((c: ClassroomData) => c['room-name']));
 
   // NOTE: merge individually sorted lists
   resultSet = resultSet.concat(soRooms, ihsRooms, lawRooms);
@@ -98,13 +98,15 @@ export function orderByCampus(data: ClassroomData[]) {
 // NOTE: given a string of text, iterate through all records provided and return those that have a field that contains the text, without duplicates
 export function filterByText(text: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
-
+  //console.log(data);
   for(let item of data) {
     const keys: string[] = Object.keys(item);
+    //console.log(keys);
     for(let k of keys) {
-      let p: string = prop(item, k);  
-      if(typeof p === "string") { 
-        if(p.toString().toUpperCase().includes(text.toUpperCase())) {
+      let p: string = prop(item, k);
+      //console.log(typeof p);
+      if(typeof p !== "object") { 
+        if(p.toUpperCase().indexOf(text.toUpperCase()) >= 0) {
           if(!resultSet.includes(item)) {
             resultSet.push(item);
           }
@@ -112,6 +114,6 @@ export function filterByText(text: string, data: ClassroomData[]): ClassroomData
       }
     } 
   }
-  
+  //console.log(resultSet);
   return orderByCampus(resultSet);
 }

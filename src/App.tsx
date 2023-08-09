@@ -38,16 +38,15 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
           //elementID: 0
         });
       } else {
-        console.log(this.state.data);
+        
         //let initialDataOrderedByCampus = Util.orderByCampus(response);
         let initialData = response;
         this.setState({
-          // NOTE: set up the "gold copy" from remote and initially the current filtered data is the same
-          //data: initialDataOrderedByCampus, 
+          /* NOTE: set up the "gold copy" from remote - all data and comes sorted by campus then room number */
           data: initialData,
-          //currentFilteredData: initialDataOrderedByCampus
           currentFilteredData: initialData
         });
+       
       }
     }); 
   }
