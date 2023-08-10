@@ -113,7 +113,8 @@ class App extends React.Component<Services.AppProps, Services.AppState> {
     
     //console.log(this.state.data);
     if(this.state.data.length) {
-      resultSet = Util.filterByRoomType(value, this.state.data);
+      // NOTE: if we are already f
+      resultSet = Util.filterByRoomType(this.state.currentCampus, value, this.state.data);
       this.setState({
         currentRoomType: value,
         currentFilteredData: resultSet,

@@ -54,9 +54,14 @@ export function filterByCampus(campusID: string, data: ClassroomData[]): Classro
 }
 
 // NOTE: filter by room type 
-export function filterByRoomType(roomType: string, data: ClassroomData[]): ClassroomData[] {
+export function filterByRoomType(campusID: string, roomType: string, data: ClassroomData[]): ClassroomData[] {
   let resultSet: ClassroomData[] = [];
-  
+  // NOTE: Filter by campus first, if one is selected
+  if(campusID !== '') {
+    data = filterByCampus(campusID, data);
+  }
+
+  // NOTE: now look within the campus filtered results for room type
   for(let item of data) {
     // NOTE: check the current record's ID. If it matches what we want, add to the results set
     if(item['room-type'] === roomType) {
